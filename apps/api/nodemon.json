@@ -1,0 +1,8 @@
+{
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"],
+    "exec": "ts-node ./src/index.ts",
+    "watch": ["src"],
+    "ext": "ts",
+    "ignore": ["node_modules", "dist"]
+}
