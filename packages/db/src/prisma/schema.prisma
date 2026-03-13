@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  plan      String   @default("free")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  apiKeys   ApiKey[]
+  rules     Rule[]
+  usageLogs UsageLog[]
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  name      String
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Rule {
+  id        String    @id @default(uuid())
+  name      String // e.g. "send_email", "generate_report"
+  tenantId  String
+  limit     Int //  e.g. 5 request per second 
+  window    Int //  e.g. 3600. -> 
+  algorithm Algorithm @default(FIXED_WINDOW)
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model UsageLog {
+  id         String   @id @default(uuid())
+  identifier String // e.g. user_123
+  rule       String // e.g. "send_email"
+  allowed    Boolean // e.g. true or false
+  count      Int // e.g. 1
+  tenantId   String
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+enum Algorithm {
+  FIXED_WINDOW
+  SLIDING_WINDOW
+}
