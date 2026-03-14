@@ -10,8 +10,8 @@ export default defineConfig({
   migrations: {
     path: "./prisma/migrations",
   },
+  // @ts-ignore
   datasource: {
     ...(process.env.DATABASE_URL && { url: process.env.DATABASE_URL }),
   },
-  
 });
