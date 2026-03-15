@@ -4,27 +4,31 @@
   "description": "",
   "main": "./src/prisma.ts",
   "type": "module",
-  "exports":{
-     ".":"./src/prisma.ts"
+  "exports": {
+    ".": "./src/prisma.ts"
   },
   "scripts": {
     "build": "tsc -b tsconfig.json",
     "start": "node dist/prisma.js",
-    "db:migrate":"prisma migrate dev --config src/prisma.config.ts",
-    "db:generate":" prisma generate --config src/prisma.config.ts"
+    "db:migrate": "prisma migrate dev --schema src/prisma/schema.prisma",
+    "db:generate": " prisma generate --config src/prisma.config.ts",
+    "db:seed": "tsx src/seed.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.6.0",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@types/bcrypt": "^6.0.0",
+    "bcrypt": "^6.0.0"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.3",
     "@types/node": "^22.15.3",
     "dotenv": "^17.3.1",
     "prisma": "^6.6.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

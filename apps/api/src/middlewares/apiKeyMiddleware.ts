@@ -6,6 +6,7 @@ declare global {
   namespace Express {
     interface Request {
       tenantId: string;
+      plan: string;
     }
   }
 }
@@ -38,6 +39,7 @@ export async function apiKeyMiddleware(
     }
 
     req.tenantId = validApiKeys.tenantId;
+    req.plan = validApiKeys.tenant.plan;
     next();
   } catch (err) {
     console.error("Error hashing API Key:", err); // Debugging log

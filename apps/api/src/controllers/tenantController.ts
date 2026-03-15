@@ -74,3 +74,32 @@ export async function generateApiKey(req: Request, res: Response) {
     });
   }
 }
+
+export async function deleteApiKey(req: Request, res: Response) {
+  try {
+    const apiKeyId = req.params.id;
+
+    if (!apiKeyId) {
+      return res.status(400).json({
+        error: "API Key ID not found in request",
+      });
+    }
+
+    const deletedApiKey = await prisma.apiKey.delete({
+      where: {
+        id: apiKeyId as string,
+      },
+    });
+
+    if (!deletedApiKey) {
+      return res.status(404).json({
+        error: "API Key not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "API Key deleted successfully",
+      apiKey: deletedApiKey,
+    });
+  } catch (err) {}
+}

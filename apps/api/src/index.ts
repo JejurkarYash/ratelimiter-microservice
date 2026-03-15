@@ -6,6 +6,7 @@ import tenantRoute from "./routes/tenantRoutes.js";
 import jwtMiddleware from "./middlewares/jwtMiddlware.js";
 import { apiKeyMiddleware } from "./middlewares/apiKeyMiddleware.js";
 import sdkRoute from "./routes/sdkRoute.js";
+import rulesRoute from "./routes/rulesRoute.js";
 
 dotenv.config();
 const app = express();
@@ -13,12 +14,13 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-
 // Auth Routes
 app.use("/auth", authRoute);
 
-// Tenant Routes
+// All Tenant realted routes are protected by JWT Middleware
+//  all routes are insde the tenatRoute
 app.use("/tenant", jwtMiddleware, tenantRoute);
+app.use("/rules", jwtMiddleware, rulesRoute);
 
 // SDK Routes
 app.use("/sdk", apiKeyMiddleware, sdkRoute);
