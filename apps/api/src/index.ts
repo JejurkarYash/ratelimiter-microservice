@@ -7,6 +7,8 @@ import jwtMiddleware from "./middlewares/jwtMiddlware.js";
 import { apiKeyMiddleware } from "./middlewares/apiKeyMiddleware.js";
 import sdkRoute from "./routes/sdkRoute.js";
 import rulesRoute from "./routes/rulesRoute.js";
+// Initialize Redis Client
+import "./lib/redis.js";
 
 dotenv.config();
 const app = express();

@@ -20,11 +20,15 @@ export async function apiKeyMiddleware(
 
   if (!apiKey) {
     return res.status(401).json({
-      error: "API Key Missing",
+      error: {
+        code: "APIKEY_NOT_FOUND",
+        message: "api key not found in request headers",
+      },
     });
   }
   try {
     const hashedApiKey = hashApiKey(apiKey);
+
     const validApiKeys = await prisma.apiKey.findUnique({
       where: {
         key: hashedApiKey,
@@ -34,7 +38,10 @@ export async function apiKeyMiddleware(
 
     if (!validApiKeys || !validApiKeys.isActive) {
       return res.status(401).json({
-        error: "Invalid or inactive API Key",
+        error: {
+          code: "INVALID_API_KEY",
+          message: " provide valid api key",
+        },
       });
     }
 
@@ -42,9 +49,12 @@ export async function apiKeyMiddleware(
     req.plan = validApiKeys.tenant.plan;
     next();
   } catch (err) {
-    console.error("Error hashing API Key:", err); // Debugging log
+    console.error("Error in middleware :", err);
     return res.status(500).json({
-      error: "Internal Server Error",
+      error: {
+        code: "INTERNAL_ERROR",
+        message: "Something went wrong in our end",
+      },
       errorDetails: err,
     });
   }
