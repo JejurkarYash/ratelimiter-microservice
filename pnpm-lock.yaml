@@ -29,6 +29,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      '@shanks/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@types/bcrypt':
         specifier: ^6.0.0
         version: 6.0.0
@@ -160,6 +163,22 @@ importers:
       typescript-eslint:
         specifier: ^8.50.0
         version: 8.50.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.2)
+
+  packages/sdk:
+    dependencies:
+      '@types/express':
+        specifier: ^5.0.6
+        version: 5.0.6
+      express:
+        specifier: ^5.2.1
+        version: 5.2.1
+    devDependencies:
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.15.3
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/types:
     dependencies:

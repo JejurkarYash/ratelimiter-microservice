@@ -3,7 +3,6 @@ import { prisma } from "@repo/db";
 import { generateRawApiKey } from "../utils/generateRawApiKey.js";
 import { hashApiKey } from "../utils/hashApiKey.js";
 import { resetLimitFunction } from "../services/resetLimit.js";
-import id from "zod/v4/locales/id.js";
 
 export async function getTenantInfo(req: Request, res: Response) {
   const tenantId = req.tenantId;
@@ -211,12 +210,13 @@ export async function resetLimit(req: Request, res: Response) {
 
   const identifier = req.params.identifier as string;
   const ruleName = req.body.rule;
+  const apiKeyId = req.body.apiKeyId;
 
   try {
     const rule = await prisma.rule.findUnique({
       where: {
-        tenantId_name: {
-          tenantId,
+        apiKeyId_name: {
+          apiKeyId,
           name: ruleName,
         },
       },

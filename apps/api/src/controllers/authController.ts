@@ -11,7 +11,9 @@ dotenv.config();
 
 export default async function authController(req: Request, res: Response) {
   try {
+    console.log("control reach here");
     const parsedData = authSchema.safeParse(req.body);
+
     if (!parsedData.success) {
       throw parsedData.error;
     }

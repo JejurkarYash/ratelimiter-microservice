@@ -24,12 +24,15 @@ model Tenant {
 model ApiKey {
   id        String   @id @default(uuid())
   key       String   @unique
-  name      String
+  name      String // e.g. "Key for service A" project name 
   tenantId  String
   tenant    Tenant   @relation(fields: [tenantId], references: [id])
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  rules     Rule[]
+
+  @@unique([tenantId, name]) // Ensure unique project names per tenant
 }
 
 model Rule {
@@ -39,11 +42,13 @@ model Rule {
   limit     Int //  e.g. 5 request per second 
   window    Int //  e.g. 3600. -> 
   algorithm Algorithm @default(FIXED_WINDOW)
+  apiKeyId  String
+  apiKey    ApiKey    @relation(fields: [apiKeyId], references: [id])
   tenant    Tenant    @relation(fields: [tenantId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  @@unique([tenantId, name])
+  @@unique([apiKeyId, name]) // ensure unique rule names per API key/project
 }
 
 model UsageLog {

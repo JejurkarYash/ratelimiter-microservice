@@ -12,7 +12,7 @@ interface FixedWindowResult {
 type LuaScriptResult = [number, number, number, number];
 
 export async function fixedWindow(
-  tenantId: string,
+  apiKeyId: string,
   ruleName: string,
   identifier: string,
   limit: number,
@@ -23,7 +23,7 @@ export async function fixedWindow(
     const windowStart = getWindowStart(window);
 
     // Construct the Redis key for this tenant, identifier, and rule
-    const key = `ratelimit:${tenantId}:${identifier}:${ruleName}:${windowStart}`;
+    const key = `ratelimit:${apiKeyId}:${identifier}:${ruleName}:${windowStart}`;
 
     const result: LuaScriptResult = (await redisClient.eval(
       fixedWindowScript,
@@ -41,7 +41,7 @@ export async function fixedWindow(
     };
   } catch (err) {
     console.error(`[RateLimit Error] fixedwindow failed`, {
-      tenantId,
+      apiKeyId,
       identifier,
       ruleName,
       err,

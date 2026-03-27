@@ -8,6 +8,7 @@ export async function sdkCheck(req: Request, res: Response) {
   const plan = req.plan;
   const ruleName = req.body.rule;
   const identifier = req.body.identifier;
+  const apiKeyId = req.apiKeyId;
 
   if (!ruleName || !identifier) {
     return res.status(400).json({
@@ -23,9 +24,9 @@ export async function sdkCheck(req: Request, res: Response) {
     // Fetch the rule based on tenantId and ruleName
     const rule = await prisma.rule.findUnique({
       where: {
-        tenantId_name: {
-          tenantId,
-          name: ruleName as string,
+        apiKeyId_name: {
+          name: ruleName,
+          apiKeyId: apiKeyId,
         },
       },
     });
@@ -43,14 +44,14 @@ export async function sdkCheck(req: Request, res: Response) {
     const result =
       rule.algorithm === "FIXED_WINDOW"
         ? await fixedWindow(
-            tenantId,
+            apiKeyId,
             ruleName,
             identifier,
             rule.limit,
             rule.window,
           )
         : await slidingWindow(
-            tenantId,
+            apiKeyId,
             identifier,
             rule.name,
             rule.window,

@@ -7,6 +7,7 @@ declare global {
     interface Request {
       tenantId: string;
       plan: string;
+      apiKeyId: string;
     }
   }
 }
@@ -27,6 +28,7 @@ export async function apiKeyMiddleware(
     });
   }
   try {
+    // hashing the api key before storing/checking
     const hashedApiKey = hashApiKey(apiKey);
 
     const validApiKeys = await prisma.apiKey.findUnique({
@@ -44,9 +46,9 @@ export async function apiKeyMiddleware(
         },
       });
     }
-
     req.tenantId = validApiKeys.tenantId;
     req.plan = validApiKeys.tenant.plan;
+    req.apiKeyId = validApiKeys.id;
     next();
   } catch (err) {
     console.error("Error in middleware :", err);

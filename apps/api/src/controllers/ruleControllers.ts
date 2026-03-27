@@ -7,6 +7,7 @@ export async function createRule(req: Request, res: Response) {
   try {
     const tenantId = req.tenantId;
     const parseData = createRuleSchema.safeParse(req.body);
+    const apiKeyId = req.body.apiKeyId;
     if (!parseData.success) {
       throw parseData.error;
     }
@@ -16,6 +17,21 @@ export async function createRule(req: Request, res: Response) {
         error: "Tenant ID not found in request",
       });
     }
+
+    // verifying the apikey belongs to user
+    const apiKey = await prisma.apiKey.findUnique({
+      where: { id: apiKeyId },
+    });
+
+    if (!apiKey || apiKey.tenantId !== tenantId) {
+      return res.status(403).json({
+        error: {
+          code: "FORBIDDEN",
+          message: "This API key does not belong to this account",
+        },
+      });
+    }
+
     const { name, limit, window, algorithm } = parseData.data;
     if (!name || !limit || !window || !algorithm) {
       return res.status(400).json({
@@ -45,6 +61,7 @@ export async function createRule(req: Request, res: Response) {
         window,
         algorithm,
         limit,
+        apiKeyId,
       },
     });
 
@@ -96,6 +113,7 @@ export async function getRules(req: Request, res: Response) {
 export async function updateRule(req: Request, res: Response) {
   const tenantId = req.tenantId;
   const ruleId = req.params.id as string;
+  
 
   if (!tenantId) {
     return res.status(400).json({
@@ -201,4 +219,46 @@ export async function deleteRule(req: Request, res: Response) {
       errorDetails: error,
     });
   }
+}
+
+export async function getRuleFromId(req: Request, res: Response) {
+  const tenantId = req.tenantId;
+  const ruleId = req.params.id as string;
+
+  if (!tenantId) {
+    return res.status(404).json({
+      error: {
+        code: "TENANT_ID_NOT_FOUND",
+        message: "Provide Tenant id !",
+      },
+    });
+  }
+
+  if (!ruleId) {
+    return res.status(404).json({
+      error: {
+        code: "RULE_ID_REQUIRED",
+        message: "provide rule id ",
+      },
+    });
+  }
+  try {
+    const rule = await prisma.rule.findUnique({
+      where: {
+        tenantId,
+        id: ruleId,
+      },
+    });
+
+    if (!rule) {
+      return res.status(404).json({
+        error: {
+          code: "RULE_NOT_FOUND",
+          message: `ruleid ${ruleId} not found`,
+        },
+      });
+    }
+
+    return res.status(200).json(rule);
+  } catch (err) {}
 }

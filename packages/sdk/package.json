@@ -1,0 +1,28 @@
+{
+   "name": "@shanks/sdk",
+   "version": "1.0.0",
+   "description": "",
+   "main": "dist/index.js",
+   "types": "dist/index.d.ts",
+   "exports": {
+      ".": {
+         "require": "./dist/index.js",
+         "import": "./dist/index.js"
+      }
+   },
+   "scripts": {
+      "build": "tsc --build tsconfig.json",
+      "start": "node dist/index.js"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "devDependencies": {
+      "@types/node": "^22.15.3",
+      "typescript": "^5.9.3"
+   },
+   "dependencies": {
+      "@types/express": "^5.0.6",
+      "express": "^5.2.1"
+   }
+}
