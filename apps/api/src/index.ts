@@ -47,8 +47,6 @@ app.get("/test", async (req, res) => {
       rule: "john_sdk",
     });
 
-    console.log("result: ", result);
-
     if (!result.allowed) {
       return res.status(429).json({
         error: {
