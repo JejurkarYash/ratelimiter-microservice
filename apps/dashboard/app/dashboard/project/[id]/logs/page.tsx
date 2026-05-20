@@ -39,7 +39,7 @@ const LogsPage = () => {
     "all" | "allowed" | "blocked"
   >("all");
   const [ruleFilter, setRuleFilter] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // Debounced rule search
+  const [searchQuery, setSearchQuery] = useState(""); // Rule search input
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -78,7 +78,7 @@ const LogsPage = () => {
     }).format(date);
   };
 
-  // Debounce search
+  // Debounce rule search
   useEffect(() => {
     const timer = setTimeout(() => {
       setRuleFilter(searchQuery);
