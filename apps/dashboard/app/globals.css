@@ -4,7 +4,7 @@
 :root {
   --foreground: #ffffff;
   --background: #171717;
-  --primary : #F97316 
+  --primary: #F97316;
 }
 
 @theme inline {
@@ -13,18 +13,33 @@
   --color-primary: var(--primary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Dashboard colors */
+  --color-dashboard-primary: #101012;
+  --color-project-card: #19191a;
+
+
   --font-jetbrains-mono: 'JetBrains Mono', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background:var(--color-background)
-    --foreground: var(--color-foreground);
+    --background: var(--color-background) --foreground: var(--color-foreground);
   }
 }
+
+
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'JetBrains Mono', monospace;
+}
+
+html.no-scroll,
+body.no-scroll {
+  overflow: hidden;
+  height: 100dvh;
+  margin: 0;
+  overscroll-behavior: none;
 }

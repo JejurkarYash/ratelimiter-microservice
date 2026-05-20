@@ -4,6 +4,136 @@ import { generateRawApiKey } from "../utils/generateRawApiKey.js";
 import { hashApiKey } from "../utils/hashApiKey.js";
 import { resetLimitFunction } from "../services/resetLimit.js";
 
+export async function getProjects(req: Request, res: Response) {
+  const tenantId = req.tenantId;
+
+  if (!tenantId) {
+    return res.status(400).json({ error: "Tenant ID not found in request" });
+  }
+
+  try {
+    // Get all API keys (projects) for this tenant with rule count
+    const apiKeys = await prisma.apiKey.findMany({
+      where: { tenantId },
+      include: {
+        _count: { select: { rules: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    // For each project, compute today's usage stats from UsageLog
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const projectsWithStats = await Promise.all(
+      apiKeys.map(async (apiKey) => {
+        const [requestsToday, blockedToday, lastLog] = await Promise.all([
+          // Total requests today for this project
+          prisma.usageLog.count({
+            where: { apiKeyId: apiKey.id, createdAt: { gte: today } },
+          }),
+          // Blocked requests today for this project
+          prisma.usageLog.count({
+            where: { apiKeyId: apiKey.id, allowed: false, createdAt: { gte: today } },
+          }),
+          // Most recent log entry for "last active" time
+          prisma.usageLog.findFirst({
+            where: { apiKeyId: apiKey.id },
+            orderBy: { createdAt: "desc" },
+            select: { createdAt: true },
+          }),
+        ]);
+
+        return {
+          id: apiKey.id,
+          name: apiKey.name,
+          // Mask the key — show only last 6 chars
+          apiKeyMasked: `sk_****${apiKey.key.slice(-6)}`,
+          isActive: apiKey.isActive,
+          rulesCount: apiKey._count.rules,
+          requestsToday,
+          blockedToday,
+          lastActiveAt: lastLog?.createdAt ?? null,
+          createdAt: apiKey.createdAt,
+        };
+      })
+    );
+
+    return res.status(200).json(projectsWithStats);
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error", details: error });
+  }
+}
+
+export async function getProjectOverview(req: Request, res: Response) {
+  const tenantId = req.tenantId;
+  const id = req.params.id as string; // Project (ApiKey) ID
+
+  if (!tenantId) return res.status(400).json({ error: "Tenant ID not found in request" });
+  if (!id) return res.status(400).json({ error: "Project ID is required" });
+
+  try {
+    const apiKey = await prisma.apiKey.findUnique({
+      where: { id, tenantId },
+      include: {
+        rules: { orderBy: { createdAt: 'desc' } }
+      }
+    });
+
+    if (!apiKey) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [totalRequests, blockedRequests, recentActivity, topBlockedRaw] = await Promise.all([
+      // Total requests today
+      prisma.usageLog.count({ where: { apiKeyId: id, createdAt: { gte: today } } }),
+      // Blocked requests today
+      prisma.usageLog.count({ where: { apiKeyId: id, allowed: false, createdAt: { gte: today } } }),
+      // Recent activity (latest 5 logs)
+      prisma.usageLog.findMany({
+        where: { apiKeyId: id },
+        orderBy: { createdAt: 'desc' },
+        take: 5,
+        select: { identifier: true, allowed: true, rule: true, createdAt: true }
+      }),
+      // Top blocked rules
+      prisma.usageLog.groupBy({
+        by: ['rule'],
+        where: { apiKeyId: id, allowed: false },
+        _count: { rule: true },
+        orderBy: { _count: { rule: 'desc' } },
+        take: 4,
+      })
+    ]);
+
+    const allowedRequests = totalRequests - blockedRequests;
+
+    return res.status(200).json({
+      project: {
+        id: apiKey.id,
+        name: apiKey.name,
+        apiKeyMasked: `sk_live_****${apiKey.key.slice(-6)}`,
+        isActive: apiKey.isActive,
+      },
+      stats: {
+        totalRequests,
+        allowedRequests,
+        blockedRequests,
+      },
+      topBlockedRules: topBlockedRaw.map(r => ({ rule: r.rule, count: r._count.rule })),
+      recentActivity,
+      rules: apiKey.rules
+    });
+
+  } catch (error) {
+    console.error("Project overview error:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 export async function getTenantInfo(req: Request, res: Response) {
   const tenantId = req.tenantId;
 
@@ -66,6 +196,7 @@ export async function generateApiKey(req: Request, res: Response) {
 
     return res.status(201).json({
       message: "API Key generated successfully",
+      apiKeyId: apiKey.id,
       apiKey: rawApiKey,
     });
   } catch (error) {
@@ -102,7 +233,7 @@ export async function deleteApiKey(req: Request, res: Response) {
       message: "API Key deleted successfully",
       apiKey: deletedApiKey,
     });
-  } catch (err) {}
+  } catch (err) { }
 }
 
 export async function getUsage(req: Request, res: Response) {
@@ -163,9 +294,9 @@ export async function getUsage(req: Request, res: Response) {
 
     // calculating stats
     const allowedCount =
-      stats.find((s) => s.allowed === true)?._count.allowed || 0;
+      stats.find((s: any) => s.allowed === true)?._count.allowed || 0;
     const blockedCount =
-      stats.find((s) => s.allowed === false)?._count.allowed || 0;
+      stats.find((s: any) => s.allowed === false)?._count.allowed || 0;
     const total = allowedCount + blockedCount;
     const blockRate =
       total > 0 ? ((blockedCount / total) * 100).toFixed(1) + "%" : "0%";

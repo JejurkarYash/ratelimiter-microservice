@@ -12,6 +12,7 @@ export const createRuleSchema = z.object({
   limit: z.number(),
   algorithm: z.enum([Algorithm.FIXED_WINDOW, Algorithm.SLIDING_WINDOW]),
   window: z.number(),
+  apiKeyId: z.string()
 });
 
 export const updateRuleSchemaType = z.object({

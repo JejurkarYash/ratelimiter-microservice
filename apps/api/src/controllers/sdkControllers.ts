@@ -68,6 +68,7 @@ export async function sdkCheck(req: Request, res: Response) {
           allowed: result.allowed,
           count: result.count,
           tenantId: tenantId,
+          apiKeyId: apiKeyId,
         },
       })
       .catch(console.error);

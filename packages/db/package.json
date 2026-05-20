@@ -2,17 +2,18 @@
   "name": "@repo/db",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/prisma.ts",
+  "main": "./dist/prisma.js",
   "type": "module",
   "exports": {
-    ".": "./src/prisma.ts"
+    ".": "./dist/prisma.js"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.json",
+    "build": "pnpm run db:generate && tsc -b tsconfig.json",
     "start": "node dist/prisma.js",
     "db:migrate": "prisma migrate dev --schema src/prisma/schema.prisma",
-    "db:generate": " prisma generate --config src/prisma.config.ts",
-    "db:seed": "tsx src/seed.ts"
+    "db:generate": " prisma generate --config src/prisma.generate.config.ts",
+    "db:seed": "tsx src/seed.ts",
+    "db:studio": "prisma studio --schema src/prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",

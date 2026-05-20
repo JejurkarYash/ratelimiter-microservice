@@ -7,10 +7,16 @@ import {
   deleteApiKey,
   getUsage,
   resetLimit,
+  getProjects,
+  getProjectOverview,
 } from "../controllers/tenantController.js";
 
 const router: Router = Router();
 
+// get all projects (API keys) with stats
+router.get("/projects", getProjects);
+// get project overview data
+router.get("/projects/:id/overview", getProjectOverview);
 // generate api key
 router.post("/api-key", generateApiKey);
 // get profile data
