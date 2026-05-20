@@ -117,6 +117,7 @@ export async function getProjectOverview(req: Request, res: Response) {
         name: apiKey.name,
         apiKeyMasked: `sk_live_****${apiKey.key.slice(-6)}`,
         isActive: apiKey.isActive,
+        createdAt: apiKey.createdAt,
       },
       stats: {
         totalRequests,
@@ -394,5 +395,65 @@ export async function resetLimit(req: Request, res: Response) {
         errorDetails: err,
       },
     });
+  }
+}
+
+
+export async function getProjectLogs(req: Request, res: Response) {
+  try {
+    const tenantId = req.tenantId;
+    const apiKeyId = req.params.id as string;
+
+    if (!tenantId) {
+      return res.status(400).json({ error: "Tenant ID not found in request" });
+    }
+    if (!apiKeyId) {
+      return res.status(400).json({ error: "Project ID is required" });
+    }
+
+    const rule = req.query.rule as string | undefined;
+    const statusStr = req.query.status as string | undefined; // "allowed" | "blocked" | "all"
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 50;
+
+    let allowedFilter: boolean | undefined = undefined;
+    if (statusStr === "allowed") allowedFilter = true;
+    if (statusStr === "blocked") allowedFilter = false;
+
+    const where = {
+      tenantId,
+      apiKeyId,
+      ...(rule && rule !== "all" ? { rule } : {}),
+      ...(allowedFilter !== undefined ? { allowed: allowedFilter } : {}),
+    };
+
+    const [total, logs] = await Promise.all([
+      prisma.usageLog.count({ where }),
+      prisma.usageLog.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        take: limit,
+        skip: (page - 1) * limit,
+        select: {
+          id: true,
+          identifier: true,
+          rule: true,
+          allowed: true,
+          count: true,
+          createdAt: true,
+        },
+      }),
+    ]);
+
+    return res.status(200).json({
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      logs,
+    });
+  } catch (error) {
+    console.error("Error fetching project logs:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }

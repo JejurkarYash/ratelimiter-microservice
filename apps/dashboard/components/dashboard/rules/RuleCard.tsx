@@ -88,8 +88,8 @@ const RuleCard = ({ id, name, limit, window: windowSec, algorithm, createdAt, on
 
                 {/* Algorithm */}
                 <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[9.5px] font-mono ${isFixed
-                        ? "bg-blue-500/[0.07] border-blue-500/[0.15] text-blue-400/60"
-                        : "bg-violet-500/[0.07] border-violet-500/[0.15] text-violet-400/60"
+                    ? "bg-blue-500/[0.07] border-blue-500/[0.15] text-blue-400/60"
+                    : "bg-violet-500/[0.07] border-violet-500/[0.15] text-violet-400/60"
                     }`}>
                     <Cpu size={8} />
                     {isFixed ? "Fixed Window" : "Sliding Window"}
@@ -110,12 +110,12 @@ const RuleCard = ({ id, name, limit, window: windowSec, algorithm, createdAt, on
                     onClick={handleDelete}
                     title={confirmDelete ? "Click again to confirm" : "Delete rule"}
                     className={`flex items-center gap-1 text-[10px] font-mono transition-all duration-200 cursor-pointer ml-auto px-2 py-0.5 rounded-md ${confirmDelete
-                            ? "bg-red-500/10 border border-red-500/30 text-red-400"
-                            : "text-white/20 hover:text-red-400/70 border border-transparent"
+                        ? "bg-red-500/10 border border-red-500/30 text-red-400"
+                        : "text-white/20 hover:text-red-400/70 border border-transparent"
                         }`}
                 >
                     <Trash2 size={11} />
-                    {confirmDelete ? "confirm?" : ""}
+                    {confirmDelete ? "confirm ?" : ""}
                 </button>
                 <button
                     onClick={(e) => { e.stopPropagation(); onEdit?.(id); }}

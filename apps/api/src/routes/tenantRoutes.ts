@@ -9,6 +9,7 @@ import {
   resetLimit,
   getProjects,
   getProjectOverview,
+  getProjectLogs,
 } from "../controllers/tenantController.js";
 
 const router: Router = Router();
@@ -17,6 +18,8 @@ const router: Router = Router();
 router.get("/projects", getProjects);
 // get project overview data
 router.get("/projects/:id/overview", getProjectOverview);
+// get project logs
+router.get("/projects/:id/logs", getProjectLogs);
 // generate api key
 router.post("/api-key", generateApiKey);
 // get profile data

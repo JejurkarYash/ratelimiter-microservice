@@ -83,6 +83,7 @@ export async function createRule(req: Request, res: Response) {
 
 export async function getRules(req: Request, res: Response) {
   const tenantId = req.tenantId;
+  const apiKeyId = req.query.apiKeyId as string | undefined;
 
   if (!tenantId) {
     return res.status(400).json({
@@ -90,10 +91,17 @@ export async function getRules(req: Request, res: Response) {
     });
   }
 
+  if (!apiKeyId) {
+    return res.status(400).json({
+      error: "API Key ID is required",
+    });
+  }
+
   try {
     const rules = await prisma.rule.findMany({
       where: {
         tenantId,
+        apiKeyId
       },
     });
 
