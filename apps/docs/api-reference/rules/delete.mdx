@@ -1,0 +1,22 @@
+---
+title: Delete Rule
+description: Delete a rate limit rule permanently.
+---
+
+```http
+DELETE /rules/rule/{ruleId}
+```
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Response (200):**
+
+```json
+{
+  "message": "Rule deleted successfully"
+}
+```
+
+<Warning>
+  Deleting a rule is irreversible. Any SDK calls using this rule name will fail with a `RULE_NOT_FOUND` error after deletion.
+</Warning>

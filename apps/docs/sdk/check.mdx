@@ -1,0 +1,116 @@
+---
+title: limiter.check()
+description: Check whether a request is allowed under a given rate limit rule.
+---
+
+## Overview
+
+`limiter.check()` is the core method. Call it before any business logic you want to rate limit.
+
+```typescript
+const result = await limiter.check({
+  identifier: "user_123",
+  rule: "send_email",
+});
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|:---:|---|
+| `identifier` | `string` | ✅ | Unique key for the entity (user ID, IP, email, etc.) |
+| `rule` | `string` | ✅ | Name of the rule as defined in your dashboard |
+
+## Return Value (`CheckResult`)
+
+```typescript
+interface CheckResult {
+  allowed: boolean;    // Whether the request is permitted
+  count: number;       // Current request count in this window
+  limit: number;       // Maximum allowed requests per window
+  remaining: number;   // Requests remaining before blocking
+  rule: string;        // Rule name that was checked
+  identifier: string;  // Identifier that was checked
+}
+```
+
+## Basic Example
+
+```typescript
+import { limiter } from "./lib/limiter";
+
+async function sendEmail(userId: string, email: string) {
+  const result = await limiter.check({
+    identifier: userId,
+    rule: "send_email",
+  });
+
+  if (!result.allowed) {
+    throw new Error(`Rate limit exceeded. Try again later.`);
+  }
+
+  // proceed with sending email...
+}
+```
+
+## Express Route Example
+
+```typescript
+import express from "express";
+import { limiter } from "./lib/limiter";
+
+const app = express();
+
+app.post("/send-email", async (req, res) => {
+  const userId = req.user.id;
+
+  const result = await limiter.check({
+    identifier: userId,
+    rule: "send_email",
+  });
+
+  if (!result.allowed) {
+    return res.status(429).json({
+      error: "Too many requests",
+      remaining: result.remaining,
+    });
+  }
+
+  // send email logic here...
+  return res.json({ success: true });
+});
+```
+
+## Error Handling
+
+`check()` throws a `RateLimiterError` in these cases:
+
+| Error Code | When it happens |
+|---|---|
+| `MISSING_API_KEY` | SDK initialized without an API key |
+| `MISSING_FIELDS` | `identifier` or `rule` not provided |
+| `NETWORK_ERROR` | Could not reach the Throttlr API |
+| `UNKNOWN_ERROR` | Unexpected server-side error |
+
+```typescript
+import { RateLimiterError } from "@throttlr/sdk";
+
+try {
+  const result = await limiter.check({ identifier, rule });
+} catch (err) {
+  if (err instanceof RateLimiterError) {
+    console.error(err.code, err.message, err.statusCode);
+  }
+}
+```
+
+## Response Headers (Optional Pattern)
+
+It's good practice to expose rate limit info in response headers:
+
+```typescript
+res.set({
+  "X-RateLimit-Limit": result.limit,
+  "X-RateLimit-Remaining": result.remaining,
+});
+```

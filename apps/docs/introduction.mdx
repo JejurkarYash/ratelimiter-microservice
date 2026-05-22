@@ -1,0 +1,72 @@
+---
+title: Introduction
+description: Throttlr — a cloud-native rate limiting service for your APIs.
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.png"
+  alt="Hero Light"
+/>
+
+## What is Throttlr?
+
+Throttlr is a **hosted rate limiting service** that protects your APIs from abuse and overuse. Instead of building rate limiting logic into every service yourself, you define rules once in the dashboard and enforce them everywhere via our lightweight SDK.
+
+<CardGroup cols={2}>
+  <Card
+    title="Quickstart"
+    icon="bolt"
+    href="/quickstart"
+  >
+    Get up and running in under 5 minutes.
+  </Card>
+  <Card
+    title="SDK Reference"
+    icon="code"
+    href="/sdk/installation"
+  >
+    Install and use the Node.js SDK in your project.
+  </Card>
+  <Card
+    title="Concepts"
+    icon="book"
+    href="/concepts/how-it-works"
+  >
+    Understand how rate limiting works under the hood.
+  </Card>
+  <Card
+    title="API Reference"
+    icon="terminal"
+    href="/api-reference/introduction"
+  >
+    Explore the full REST API.
+  </Card>
+</CardGroup>
+
+## Key Features
+
+<AccordionGroup>
+  <Accordion title="Multiple Algorithms">
+    Choose between **Fixed Window** and **Sliding Window** rate limiting algorithms per rule. Fixed Window is great for simple burst control; Sliding Window gives smoother, more accurate limiting.
+  </Accordion>
+  <Accordion title="Project Isolation">
+    Each project gets its own API key. Rules, logs, and usage data are fully isolated between projects — perfect for multi-tenant SaaS products.
+  </Accordion>
+  <Accordion title="Real-time Request Logs">
+    Every request checked through the SDK is logged. Filter logs by status (allowed/blocked) or rule name directly from the dashboard.
+  </Accordion>
+  <Accordion title="Express Middleware">
+    Drop the `RateLimitermiddleware` into your Express app in one line. No boilerplate — it just works.
+  </Accordion>
+</AccordionGroup>
+
+## How it works in 30 seconds
+
+```
+1. Sign up → Create a project → Get your API key
+2. Define a Rule (e.g. "max 10 requests per minute")
+3. Install the SDK in your Node.js app
+4. Call limiter.check({ identifier, rule }) before your handler
+5. View live request logs in the dashboard
+```

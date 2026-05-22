@@ -1,0 +1,75 @@
+---
+title: Algorithms
+description: Understand the difference between Fixed Window and Sliding Window rate limiting.
+---
+
+## Fixed Window
+
+The simplest algorithm. The time axis is split into fixed intervals (windows). Each window has its own counter that resets when the window expires.
+
+```
+Window 1 (0s–60s)        Window 2 (60s–120s)
+│ req req req req req │   │ req req ...
+│ count = 5           │   │ count = 1
+└─────────────────────┘   └─────────────────
+```
+
+### Pros
+- Simple to understand and implement
+- Very fast — just `INCR` and `EXPIRE` in Redis
+- Predictable — users know their quota resets every N seconds
+
+### Cons
+- **Boundary burst problem:** A user can make `2× limit` requests by hitting `limit` just before the window ends, then `limit` again at the start of the next window.
+
+### When to use
+- Login rate limiting (e.g. 5 attempts per minute)
+- Email sending limits (e.g. 100 emails per hour)
+- Simple API quotas
+
+---
+
+## Sliding Window
+
+A more accurate approach. Instead of a fixed reset interval, the window slides continuously relative to the current time.
+
+```
+Now = T
+Window = last 60 seconds = [T-60 ... T]
+
+Only requests within this rolling window count.
+```
+
+### Pros
+- No boundary burst problem
+- Smooth, accurate limiting
+- Better user experience for high-frequency APIs
+
+### Cons
+- Slightly more complex to implement
+- Uses more Redis memory (stores request timestamps)
+
+### When to use
+- API endpoints where burst attacks matter
+- Real-time systems (e.g. webhook deliveries, AI completions)
+- High-traffic endpoints
+
+---
+
+## Comparison
+
+| | Fixed Window | Sliding Window |
+|---|:---:|:---:|
+| Reset behavior | Hard reset | Rolling |
+| Burst vulnerability | Yes | No |
+| Redis complexity | Low | Medium |
+| Best for | Simple limits | Accurate limits |
+
+---
+
+## Choosing in the Dashboard
+
+When creating a rule, select the algorithm from the dropdown:
+
+- **FIXED_WINDOW** — Simple, fast, good default
+- **SLIDING_WINDOW** — More accurate, better for security-sensitive routes

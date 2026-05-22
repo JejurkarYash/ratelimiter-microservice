@@ -1,0 +1,48 @@
+---
+title: List Logs
+description: Fetch paginated request logs for a project.
+---
+
+```http
+GET /tenant/projects/{projectId}/logs
+```
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Query Parameters:**
+
+| Param | Type | Default | Description |
+|---|---|---|---|
+| `page` | `number` | `1` | Page number |
+| `limit` | `number` | `50` | Results per page |
+| `status` | `string` | `all` | Filter: `all`, `allowed`, or `blocked` |
+| `rule` | `string` | — | Filter by rule name |
+
+**Response (200):**
+
+```json
+{
+  "total": 342,
+  "page": 1,
+  "limit": 15,
+  "totalPages": 23,
+  "logs": [
+    {
+      "id": "log_abc",
+      "identifier": "user_123",
+      "rule": "send_email",
+      "allowed": true,
+      "count": 3,
+      "createdAt": "2026-05-20T14:39:47.730Z"
+    },
+    {
+      "id": "log_def",
+      "identifier": "user_456",
+      "rule": "send_email",
+      "allowed": false,
+      "count": 11,
+      "createdAt": "2026-05-20T14:38:00.000Z"
+    }
+  ]
+}
+```

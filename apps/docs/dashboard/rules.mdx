@@ -1,0 +1,65 @@
+---
+title: Rules
+description: Create and manage rate limit rules from the dashboard.
+---
+
+## What is a Rule?
+
+A rule defines *how many requests* are allowed for a specific action within a time window. Rules are scoped to a single project.
+
+---
+
+## Creating a Rule
+
+1. Open your project from the Projects page
+2. Click the **Rules** tab
+3. Click **New Rule**
+4. Fill in the form:
+
+| Field | Description | Example |
+|---|---|---|
+| **Name** | Unique identifier, used in SDK | `send_email` |
+| **Limit** | Max requests per window | `10` |
+| **Window** | Duration in seconds | `3600` (= 1 hour) |
+| **Algorithm** | Fixed or Sliding Window | `FIXED_WINDOW` |
+
+5. Click **Create** — the rule is live immediately.
+
+<Tip>
+  Use descriptive, snake_case names for rules. Your developers will use this string directly in code: `limiter.check({ rule: "send_email" })`.
+</Tip>
+
+---
+
+## Editing a Rule
+
+Click the **edit icon** (pencil) on any rule card to update its limit, window, or algorithm. The rule name cannot be changed — if you need a new name, delete and recreate it.
+
+---
+
+## Deleting a Rule
+
+Click the **delete icon** (trash) on a rule card. A two-tap confirmation is required to prevent accidental deletions.
+
+<Warning>
+  Deleting a rule will stop all enforcement for that rule name. Existing SDK calls for this rule will fail with an error.
+</Warning>
+
+---
+
+## Searching Rules
+
+Use the search bar at the top of the Rules tab to filter rules by name.
+
+---
+
+## Window Reference
+
+Common window values in seconds:
+
+| Value | Meaning |
+|---|---|
+| `1` | Per second |
+| `60` | Per minute |
+| `3600` | Per hour |
+| `86400` | Per day |

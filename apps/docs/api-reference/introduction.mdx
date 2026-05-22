@@ -1,0 +1,92 @@
+---
+title: API Reference
+description: Overview of the Throttlr REST API.
+---
+
+## Base URL
+
+```
+https://api.throttlr.dev
+```
+
+## Authentication
+
+All SDK-facing endpoints use API key authentication via the `x-api-key` header:
+
+```http
+x-api-key: sk_live_your_key_here
+```
+
+All dashboard-facing endpoints (projects, rules, logs) use JWT Bearer tokens:
+
+```http
+Authorization: Bearer <jwt_token>
+```
+
+---
+
+## Rate Limit Check Endpoint
+
+This is the primary endpoint the SDK calls internally.
+
+```http
+POST /sdk/check
+```
+
+**Request body:**
+
+```json
+{
+  "identifier": "user_123",
+  "rule": "send_email"
+}
+```
+
+**Response (200 Allowed):**
+
+```json
+{
+  "allowed": true,
+  "count": 3,
+  "limit": 10,
+  "remaining": 7,
+  "rule": "send_email",
+  "identifier": "user_123"
+}
+```
+
+**Response (429 Blocked):**
+
+```json
+{
+  "allowed": false,
+  "count": 10,
+  "limit": 10,
+  "remaining": 0,
+  "rule": "send_email",
+  "identifier": "user_123"
+}
+```
+
+---
+
+## Error Format
+
+All errors follow this shape:
+
+```json
+{
+  "error": {
+    "code": "RULE_NOT_FOUND",
+    "message": "No rule named 'send_emial' found for this tenant"
+  }
+}
+```
+
+| HTTP Status | Meaning |
+|---|---|
+| `400` | Missing or invalid request fields |
+| `401` | Missing or invalid API key |
+| `404` | Rule not found |
+| `429` | Rate limit exceeded |
+| `500` | Internal server error |

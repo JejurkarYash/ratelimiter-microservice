@@ -1,0 +1,37 @@
+---
+title: Update Rule
+description: Update a rate limit rule's configuration.
+---
+
+```http
+PUT /rules/rule/{ruleId}
+```
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Request body** (all fields optional — send only what you want to change):
+
+```json
+{
+  "limit": 20,
+  "window": 3600,
+  "algorithm": "SLIDING_WINDOW"
+}
+```
+
+**Response (200):**
+
+```json
+{
+  "id": "rule_abc123",
+  "name": "send_email",
+  "limit": 20,
+  "window": 3600,
+  "algorithm": "SLIDING_WINDOW",
+  "updatedAt": "2026-04-01T10:00:00.000Z"
+}
+```
+
+<Note>
+  Rule `name` cannot be updated via this endpoint. Delete and recreate the rule if you need to rename it.
+</Note>

@@ -35,7 +35,7 @@ const SettingsPage = () => {
     const getInitials = (name: string) => name?.charAt(0).toUpperCase() ?? "U";
 
     return (
-        <div className="max-w-5xl ws-full flex flex-col gap-5">
+        <div className="max-w-5xl w-full flex flex-col gap-5">
             {/* Header */}
             <div className="flex items-end justify-between gap-4">
                 <div>

@@ -1,0 +1,49 @@
+---
+title: Request Logs
+description: View and filter real-time request logs for your project.
+---
+
+## Overview
+
+Every request checked via the SDK is logged. The **Logs** tab in your project dashboard shows a full audit trail.
+
+---
+
+## Log Columns
+
+| Column | Description |
+|---|---|
+| **Timestamp** | When the request was checked (local time) |
+| **Identifier** | The entity that made the request (e.g. `user_123`) |
+| **Rule** | Which rate limit rule was checked |
+| **Reqs** | Current request count at the time of the check |
+| **Status** | `allowed` (green) or `blocked` (red) |
+
+---
+
+## Filtering Logs
+
+Use the toolbar at the top of the Logs tab:
+
+- **Search by rule name** — type in the search box to filter logs to a specific rule
+- **Status filter** — click `all`, `allowed`, or `blocked` to filter by outcome
+- **Refresh** — click the refresh icon to fetch the latest logs manually
+
+---
+
+## Pagination
+
+Logs are paginated with 15 entries per page. Use the **Previous** and **Next** controls at the bottom of the table to navigate.
+
+The footer shows:  
+`1–15 of 342 entries`
+
+---
+
+## Log Retention
+
+Logs are stored in PostgreSQL and are retained until the project is deleted. There is no automatic expiry currently.
+
+<Note>
+  Usage Analytics (charts and aggregates) are coming in a future update. For now, the Logs tab provides the raw data.
+</Note>

@@ -1,0 +1,44 @@
+---
+title: Create Rule
+description: Create a new rate limit rule for a project.
+---
+
+```http
+POST /rules/create-rule
+```
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Request body:**
+
+```json
+{
+  "name": "send_email",
+  "limit": 10,
+  "window": 3600,
+  "algorithm": "FIXED_WINDOW",
+  "apiKeyId": "api_key_id_here"
+}
+```
+
+**Response (201):**
+
+```json
+{
+  "id": "rule_abc123",
+  "name": "send_email",
+  "limit": 10,
+  "window": 3600,
+  "algorithm": "FIXED_WINDOW",
+  "apiKeyId": "api_key_id_here",
+  "tenantId": "tenant_xyz",
+  "createdAt": "2026-03-22T14:39:47.730Z"
+}
+```
+
+**Errors:**
+
+| Code | Reason |
+|---|---|
+| `400` | Missing fields or validation error |
+| `409` | Rule with this name already exists for this project |

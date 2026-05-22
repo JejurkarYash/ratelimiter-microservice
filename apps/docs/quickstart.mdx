@@ -1,0 +1,95 @@
+---
+title: Quickstart
+description: Protect your first API route in under 5 minutes.
+---
+
+## Step 1: Create a Project
+
+1. Go to the [Throttlr Dashboard](https://app.throttlr.dev) and sign in with Google.
+2. Click **New Project** and give it a name (e.g. `my-api`).
+3. Your project is created with a unique **API Key** — copy it from the **API Key** tab.
+
+<Warning>
+  Your API key is only shown once in plaintext at creation time. Store it in your environment variables immediately.
+</Warning>
+
+---
+
+## Step 2: Create a Rate Limit Rule
+
+In your project dashboard, go to the **Rules** tab and click **New Rule**.
+
+| Field | Example Value | Description |
+|---|---|---|
+| **Name** | `send_email` | A unique identifier for this rule, used in SDK calls |
+| **Limit** | `5` | Max requests allowed per window |
+| **Window** | `60` | Time window in seconds |
+| **Algorithm** | `FIXED_WINDOW` | Fixed or Sliding Window |
+
+<Tip>
+  Rule names are what you pass to `limiter.check()`. Use descriptive names like `login_attempt` or `generate_report`.
+</Tip>
+
+---
+
+## Step 3: Install the SDK
+
+<CodeGroup>
+
+```bash npm
+npm install @throttlr/sdk
+```
+
+```bash pnpm
+pnpm add @throttlr/sdk
+```
+
+```bash yarn
+yarn add @throttlr/sdk
+```
+
+</CodeGroup>
+
+---
+
+## Step 4: Initialize & Check
+
+```typescript
+import { RateLimiter } from "@throttlr/sdk";
+
+const limiter = new RateLimiter({
+  apiKey: process.env.THROTTLR_API_KEY!,
+  baseUrl: "https://api.throttlr.dev/sdk",
+});
+
+// In your route handler:
+const result = await limiter.check({
+  identifier: "user_123",   // Unique user or IP
+  rule: "send_email",       // Must match a rule in your dashboard
+});
+
+if (!result.allowed) {
+  return res.status(429).json({ error: "Too many requests" });
+}
+
+// Continue with your logic...
+```
+
+---
+
+## Step 5: View Logs
+
+Head to the **Logs** tab in your project dashboard. You'll see every request checked by the SDK in real time, with status (✅ Allowed / ❌ Blocked), identifier, rule name, and timestamp.
+
+---
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="SDK Reference" icon="code" href="/sdk/check">
+    Full API for `check()` and `RateLimitermiddleware`
+  </Card>
+  <Card title="Algorithms Explained" icon="diagram-project" href="/concepts/algorithms">
+    Fixed Window vs Sliding Window — which should you use?
+  </Card>
+</CardGroup>

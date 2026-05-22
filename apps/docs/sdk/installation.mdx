@@ -1,0 +1,66 @@
+---
+title: Installation
+description: Install the Throttlr SDK in your Node.js or TypeScript project.
+---
+
+## Requirements
+
+- Node.js 18+
+- An API key from the [Throttlr Dashboard](https://app.throttlr.dev)
+
+## Install
+
+<CodeGroup>
+
+```bash npm
+npm install @throttlr/sdk
+```
+
+```bash pnpm
+pnpm add @throttlr/sdk
+```
+
+```bash yarn
+yarn add @throttlr/sdk
+```
+
+</CodeGroup>
+
+## Initialize
+
+Create a single instance of `RateLimiter` and reuse it across your application. Do **not** create a new instance per request.
+
+```typescript
+import { RateLimiter } from "@throttlr/sdk";
+
+export const limiter = new RateLimiter({
+  apiKey: process.env.THROTTLR_API_KEY!,
+  baseUrl: "https://api.throttlr.dev/sdk",
+});
+```
+
+### Constructor Options
+
+| Option | Type | Required | Description |
+|---|---|:---:|---|
+| `apiKey` | `string` | ✅ | Your project's API key from the dashboard |
+| `baseUrl` | `string` | ❌ | Override the API base URL (defaults to production) |
+
+<Warning>
+  Never hardcode your API key in source code. Use environment variables.
+</Warning>
+
+## Environment Setup
+
+Add your key to `.env`:
+
+```env
+THROTTLR_API_KEY=sk_live_your_key_here
+```
+
+And load it in your app:
+
+```typescript
+import dotenv from "dotenv";
+dotenv.config();
+```

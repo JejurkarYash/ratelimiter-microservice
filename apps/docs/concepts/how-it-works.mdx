@@ -1,0 +1,67 @@
+---
+title: How It Works
+description: A high-level overview of the Throttlr rate limiting architecture.
+---
+
+## Architecture Overview
+
+Throttlr is a **middleware-as-a-service** for rate limiting. Here's the full request lifecycle:
+
+```
+Your App (SDK)
+     │
+     │  POST /sdk/check  { identifier, rule }
+     ▼
+Throttlr API  (validates API key → looks up rule → checks Redis counter)
+     │
+     │  { allowed: true/false, count, limit, ... }
+     ▼
+Your App  (allow or reject the request)
+     │
+     └─→ UsageLog written to PostgreSQL (async)
+```
+
+### Components
+
+| Component | Role |
+|---|---|
+| **SDK** | Thin HTTP client your app uses to call Throttlr |
+| **API** | Express.js server that validates keys, checks rules, and enforces limits |
+| **Redis** | Stores counters per `(tenantId + rule + identifier)` with TTLs |
+| **PostgreSQL** | Stores tenants, API keys, rules, and usage logs permanently |
+| **Dashboard** | Next.js UI to manage projects, rules, and view logs |
+
+---
+
+## Request Lifecycle
+
+<Steps>
+  <Step title="API Key Validation">
+    Every SDK call includes your API key in the `x-api-key` header. The API validates it against the database and extracts the associated `tenantId`.
+  </Step>
+  <Step title="Rule Lookup">
+    The rule name you pass (e.g. `send_email`) is looked up in the database to get its `limit`, `window`, and `algorithm`.
+  </Step>
+  <Step title="Counter Check (Redis)">
+    A counter key like `rl:tenant_abc:send_email:user_123` is checked in Redis. If the count is under the limit, it's incremented and the request is allowed.
+  </Step>
+  <Step title="Response">
+    The API returns `{ allowed: true, count, limit, remaining }`. Your SDK returns this to your application so you can decide what to do.
+  </Step>
+  <Step title="Log Written">
+    A `UsageLog` entry is written to PostgreSQL with the result. This powers the Logs tab in your dashboard.
+  </Step>
+</Steps>
+
+---
+
+## Identifier
+
+The **identifier** is what uniquely identifies the entity you're rate limiting. It can be anything:
+
+- A user ID: `user_123`
+- An IP address: `192.168.1.1`
+- An email: `alice@example.com`
+- A session ID: `sess_abc123`
+
+Different identifiers for the same rule are tracked independently. So `user_123` and `user_456` each have their own counter for the `send_email` rule.

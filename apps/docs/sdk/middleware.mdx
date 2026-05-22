@@ -1,0 +1,105 @@
+---
+title: RateLimitermiddleware
+description: Drop-in Express middleware for automatic rate limiting.
+---
+
+## Overview
+
+`RateLimitermiddleware` wraps `limiter.check()` as an Express middleware so you don't have to write the check/reject logic in every route handler.
+
+## Usage
+
+```typescript
+import express from "express";
+import { RateLimiter, RateLimitermiddleware } from "@throttlr/sdk";
+
+const limiter = new RateLimiter({
+  apiKey: process.env.THROTTLR_API_KEY!,
+  baseUrl: "https://api.throttlr.dev/sdk",
+});
+
+const app = express();
+
+app.post(
+  "/generate-report",
+  RateLimitermiddleware({
+    limiter,
+    identifierFn: (req) => req.user.id,   // how to get the identifier
+    rule: "generate_report",               // rule name from dashboard
+  }),
+  (req, res) => {
+    // If you get here, the request was allowed
+    res.json({ message: "Report generated", rateLimit: req.rateLimitResult });
+  }
+);
+```
+
+## Options
+
+| Option | Type | Required | Description |
+|---|---|:---:|---|
+| `limiter` | `RateLimiter` | ✅ | Your initialized `RateLimiter` instance |
+| `rule` | `string` | ✅ | Rule name to enforce |
+| `identifierFn` | `(req) => string` | ✅ | Function to extract the identifier from the request |
+
+## Accessing the Result in Your Handler
+
+The middleware attaches the result to `req.rateLimitResult`:
+
+```typescript
+app.post(
+  "/api/action",
+  RateLimitermiddleware({ limiter, identifierFn: (req) => req.ip!, rule: "api_action" }),
+  (req, res) => {
+    console.log(req.rateLimitResult);
+    // { allowed: true, count: 3, limit: 10, remaining: 7, ... }
+    res.json({ success: true });
+  }
+);
+```
+
+## Using IP as identifier
+
+```typescript
+identifierFn: (req) => req.ip ?? "anonymous"
+```
+
+## Using authenticated user ID
+
+```typescript
+identifierFn: (req) => (req as any).user?.id ?? req.ip!
+```
+
+## Automatic 429 Response
+
+When the rate limit is exceeded, the middleware automatically responds with:
+
+```json
+HTTP 429 Too Many Requests
+
+{
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Rate limit exceeded"
+  }
+}
+```
+
+Your route handler is **not called** when the request is blocked.
+
+## TypeScript: Extending Request type
+
+To avoid TypeScript errors when accessing `req.rateLimitResult`, add a global type declaration:
+
+```typescript
+// types/express.d.ts
+import { CheckResult } from "@throttlr/sdk";
+
+declare global {
+  namespace Express {
+    interface Request {
+      rateLimitResult?: CheckResult;
+    }
+  }
+}
+```

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "luma",
+  "name": "Throttlr",
+  "colors": {
+    "primary": "#ea580c",
+    "light": "#f97316",
+    "dark": "#c2410c"
+  },
+  "appearance": {
+    "default": "dark"
+  },
+  "background": {
+    "color": {
+      "dark": "#0a0a0b"
+    }
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "./favicon.svg",
+    "dark": "./favicon.svg"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "concepts/how-it-works",
+              "concepts/algorithms",
+              "concepts/projects-and-rules"
+            ]
+          },
+          {
+            "group": "SDK",
+            "pages": [
+              "sdk/installation",
+              "sdk/check",
+              "sdk/middleware"
+            ]
+          },
+          {
+            "group": "Dashboard",
+            "pages": [
+              "dashboard/overview",
+              "dashboard/rules",
+              "dashboard/logs"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Rules",
+            "pages": [
+              "api-reference/rules/create",
+              "api-reference/rules/list",
+              "api-reference/rules/update",
+              "api-reference/rules/delete"
+            ]
+          },
+          {
+            "group": "Logs",
+            "pages": [
+              "api-reference/logs/list"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/JejurkarYash/ratelimiter-microservice",
+          "icon": "github"
+        },
+        {
+          "anchor": "Dashboard",
+          "href": "https://app.throttlr.dev",
+          "icon": "gauge"
+        }
+      ]
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:yash@throttlr.dev"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get Started",
+      "href": "https://app.throttlr.dev"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/JejurkarYash/ratelimiter-microservice"
+    }
+  }
+}

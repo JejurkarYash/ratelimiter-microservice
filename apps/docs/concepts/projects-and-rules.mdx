@@ -1,0 +1,64 @@
+---
+title: Projects & Rules
+description: Understand how projects and rules are structured in Throttlr.
+---
+
+## Projects
+
+A **Project** in Throttlr maps to a single API key. Think of it as one application or service you want to protect.
+
+- Each project has **one API key**
+- Rules and logs are scoped to that project
+- Deleting a project deletes its API key, all rules, and all logs
+
+### Example project layout
+
+```
+Project: "my-saas-backend"
+  └── API Key: sk_live_abc123...
+      ├── Rule: login_attempt    (5 req / 60s, Fixed Window)
+      ├── Rule: send_email       (10 req / 3600s, Fixed Window)
+      └── Rule: generate_report  (3 req / 60s, Sliding Window)
+```
+
+---
+
+## Rules
+
+A **Rule** defines a rate limit policy. Each rule has:
+
+| Field | Description |
+|---|---|
+| **Name** | Unique identifier used in SDK calls (e.g. `send_email`) |
+| **Limit** | Max number of requests allowed per window |
+| **Window** | Duration of the window in seconds |
+| **Algorithm** | `FIXED_WINDOW` or `SLIDING_WINDOW` |
+
+### Rule names are your contract
+
+The rule `name` is the string you pass to `limiter.check()`. If you rename a rule in the dashboard, you must update your code too, or checks will fail.
+
+<Warning>
+  Rule names must be **unique per project**. Two rules in the same project cannot have the same name.
+</Warning>
+
+---
+
+## Identifiers
+
+An **identifier** is the key you use to track individual entities. It's not stored in the rule itself — you provide it at check time.
+
+```typescript
+await limiter.check({
+  identifier: "user_456",   // tracked independently per rule
+  rule: "send_email",
+});
+```
+
+Each unique combination of `(rule, identifier)` has its own counter in Redis.
+
+---
+
+## One Key Per Project
+
+Throttlr enforces **one API key per project**. This is intentional — it keeps the authentication model simple and clear. If you need to rate limit different services separately, create separate projects.

@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Throttlr",
   description: "Next-gen Rate Limiting",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

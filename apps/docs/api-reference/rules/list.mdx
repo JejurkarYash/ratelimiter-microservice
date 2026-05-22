@@ -1,0 +1,41 @@
+---
+title: List Rules
+description: Get all rules for a project.
+---
+
+```http
+GET /rules/get-rules?apiKeyId={projectId}
+```
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Query Parameters:**
+
+| Param | Required | Description |
+|---|:---:|---|
+| `apiKeyId` | ✅ | The project ID to scope rules to |
+
+**Response (200):**
+
+```json
+[
+  {
+    "id": "rule_abc123",
+    "name": "send_email",
+    "limit": 10,
+    "window": 3600,
+    "algorithm": "FIXED_WINDOW",
+    "apiKeyId": "api_key_id_here",
+    "createdAt": "2026-03-22T14:39:47.730Z"
+  },
+  {
+    "id": "rule_def456",
+    "name": "login_attempt",
+    "limit": 5,
+    "window": 60,
+    "algorithm": "SLIDING_WINDOW",
+    "apiKeyId": "api_key_id_here",
+    "createdAt": "2026-03-22T15:10:00.000Z"
+  }
+]
+```
