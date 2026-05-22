@@ -25,7 +25,6 @@ const CreateRuleModal = ({ isOpen, onClose }: CreateRuleModalProps) => {
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-
             const response = await axiosClient.post("/rules/create-rule", {
                 name: ruleName,
                 limit,

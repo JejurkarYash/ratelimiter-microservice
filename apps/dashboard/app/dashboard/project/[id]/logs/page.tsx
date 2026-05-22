@@ -1,278 +1,223 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import {
-  Activity,
-  Search,
-  ChevronLeft,
-  ChevronRight,
-  CheckCircle2,
-  XCircle,
-  RefreshCw,
+    Activity,
+    Search,
+    ChevronLeft,
+    ChevronRight,
+    CheckCircle2,
+    XCircle,
+    RefreshCw,
 } from "lucide-react";
+import { useParams } from "next/navigation";
 import axiosClient from "@/services/axios";
 
 interface LogEntry {
-  id: string;
-  identifier: string;
-  rule: string;
-  allowed: boolean;
-  count: number;
-  createdAt: string;
+    id: string;
+    identifier: string;
+    rule: string;
+    allowed: boolean;
+    count: number;
+    createdAt: string;
 }
 
 const LogsPage = () => {
-  const params = useParams();
-  const projectId = params?.id as string;
+    const params = useParams();
+    const projectId = params?.id as string;
 
-  const [logs, setLogs] = useState<LogEntry[]>([]);
-  const [loading, setLoading] = useState(true);
+    const [logs, setLogs] = useState<LogEntry[]>([]);
+    const [loading, setLoading] = useState(true);
 
-  // Pagination
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalLogs, setTotalLogs] = useState(0);
-  const limit = 15;
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalLogs, setTotalLogs] = useState(0);
+    const limit = 15;
 
-  // Filters
-  const [statusFilter, setStatusFilter] = useState<
-    "all" | "allowed" | "blocked"
-  >("all");
-  const [ruleFilter, setRuleFilter] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // Rule search input
+    const [statusFilter, setStatusFilter] = useState<"all" | "allowed" | "blocked">("all");
+    const [ruleFilter, setRuleFilter] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
-  const fetchLogs = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosClient.get(`/tenant/projects/${projectId}/logs`, {
-        params: {
-          page,
-          limit,
-          status: statusFilter,
-          rule: ruleFilter || undefined,
-        },
-      });
-      setLogs(res.data.logs);
-      setTotalPages(res.data.totalPages);
-      setTotalLogs(res.data.total);
-    } catch (err) {
-      console.error("Failed to fetch logs:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchLogs = async () => {
+        setLoading(true);
+        try {
+            const res = await axiosClient.get(`/tenant/projects/${projectId}/logs`, {
+                params: { page, limit, status: statusFilter, rule: ruleFilter || undefined },
+            });
+            setLogs(res.data.logs);
+            setTotalPages(res.data.totalPages);
+            setTotalLogs(res.data.total);
+        } catch (err) {
+            console.error("Failed to fetch logs:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  useEffect(() => {
-    if (projectId) fetchLogs();
-  }, [projectId, page, statusFilter, ruleFilter]);
+    useEffect(() => {
+        if (projectId) fetchLogs();
+    }, [projectId, page, statusFilter, ruleFilter]);
 
-  // Format date string to display
-  const formatDate = (isoString: string) => {
-    const date = new Date(isoString);
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    }).format(date);
-  };
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setRuleFilter(searchQuery);
+            if (page !== 1) setPage(1);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
-  // Debounce rule search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setRuleFilter(searchQuery);
-      if (page !== 1) setPage(1); // reset to page 1 on search
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
+    const formatDate = (isoString: string) => {
+        const date = new Date(isoString);
+        return new Intl.DateTimeFormat("en-US", {
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        }).format(date);
+    };
 
-  return (
-    <div className="w-full flex flex-col gap-6 animate-in fade-in duration-300">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight mb-1">
-            API Request Logs
-          </h1>
-          <p className="text-sm text-white/50">
-            Detailed audit trail of all rate limiting decisions made for your
-            project.
-          </p>
-        </div>
-      </div>
-
-      {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#101012] border border-white/5 rounded-2xl p-2 mt-2">
-        <div className="relative w-full sm:w-72">
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30"
-            size={16}
-          />
-          <input
-            type="text"
-            placeholder="Search by rule name..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#19191a] border border-white/5 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all"
-          />
-        </div>
-
-        <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0 hide-scrollbar">
-          {(["all", "allowed", "blocked"] as const).map((status) => (
-            <button
-              key={status}
-              onClick={() => {
-                setStatusFilter(status);
-                setPage(1);
-              }}
-              className={`px-4 py-2 rounded-xl text-xs font-medium capitalize whitespace-nowrap transition-all duration-200 ${
-                statusFilter === status
-                  ? "bg-white/10 text-white shadow-sm"
-                  : "text-white/40 hover:text-white/70 hover:bg-white/5"
-              }`}
-            >
-              {status}
-            </button>
-          ))}
-          <button
-            onClick={fetchLogs}
-            disabled={loading}
-            className="ml-2 p-2 rounded-xl text-white/40 hover:text-white hover:bg-white/5 transition-all border border-transparent hover:border-white/10 cursor-pointer"
-          >
-            <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-          </button>
-        </div>
-      </div>
-
-      {/* Table Area */}
-      <div className="bg-[#101012] border border-white/5 rounded-2xl overflow-hidden flex flex-col relative">
-        {/* Loader overlay */}
-        {loading && (
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] z-20 flex items-center justify-center">
-            <RefreshCw className="animate-spin text-primary" size={24} />
-          </div>
-        )}
-
-        <div className="overflow-x-auto min-h-[400px]">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-white/5 bg-white/[0.02]">
-                <th className="py-4 px-6 text-xs font-semibold text-white/50 uppercase tracking-wider">
-                  Timestamp
-                </th>
-                <th className="py-4 px-6 text-xs font-semibold text-white/50 uppercase tracking-wider">
-                  Identifier
-                </th>
-                <th className="py-4 px-6 text-xs font-semibold text-white/50 uppercase tracking-wider">
-                  Rule
-                </th>
-                <th className="py-4 px-6 text-xs font-semibold text-white/50 uppercase tracking-wider">
-                  Requests
-                </th>
-                <th className="py-4 px-6 text-xs font-semibold text-white/50 uppercase tracking-wider text-right">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/[0.02]">
-              {logs.length > 0
-                ? logs.map((log) => (
-                    <tr
-                      key={log.id}
-                      className="group hover:bg-white/[0.02] transition-colors"
-                    >
-                      <td className="py-3.5 px-6 whitespace-nowrap">
-                        <span className="text-sm font-mono text-white/60 group-hover:text-white/80 transition-colors">
-                          {formatDate(log.createdAt)}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-6 whitespace-nowrap">
-                        <span className="text-sm text-white/80 font-medium">
-                          {log.identifier}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-6 whitespace-nowrap">
-                        <span className="text-xs px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-white/70 font-mono">
-                          {log.rule}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-6 whitespace-nowrap">
-                        <span className="text-sm text-white/60">
-                          {log.count}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-6 whitespace-nowrap text-right">
-                        {log.allowed ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-                            <CheckCircle2 size={12} />
-                            Allowed
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium">
-                            <XCircle size={12} />
-                            Blocked
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  ))
-                : !loading && (
-                    <tr>
-                      <td colSpan={5} className="py-32 text-center">
-                        <div className="flex flex-col items-center justify-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-2">
-                            <Activity className="text-white/30" size={24} />
-                          </div>
-                          <h3 className="text-sm font-medium text-white/70">
-                            No logs found
-                          </h3>
-                          <p className="text-xs text-white/40">
-                            Try adjusting your filters or search query.
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pagination Footer */}
-        {logs.length > 0 && (
-          <div className="border-t border-white/5 p-4 flex items-center justify-between bg-white/[0.01]">
-            <p className="text-xs text-white/40 font-medium">
-              Showing{" "}
-              <span className="text-white/80">{(page - 1) * limit + 1}</span> to{" "}
-              <span className="text-white/80">
-                {Math.min(page * limit, totalLogs)}
-              </span>{" "}
-              of <span className="text-white/80">{totalLogs}</span> entries
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="p-1.5 rounded-lg border border-white/10 text-white/50 hover:bg-white/5 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <span className="text-xs text-white/50 font-medium px-2">
-                Page {page} of {totalPages || 1}
-              </span>
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages || totalPages === 0}
-                className="p-1.5 rounded-lg border border-white/10 text-white/50 hover:bg-white/5 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
-              >
-                <ChevronRight size={16} />
-              </button>
+    return (
+        <div className="max-w-5xl w-full flex flex-col gap-5">
+            {/* Header */}
+            <div className="flex items-end justify-between gap-4">
+                <div>
+                    <p className="text-[10px] text-white/30 font-mono uppercase tracking-widest mb-1">Project</p>
+                    <h1 className="text-[18px] font-semibold text-white/90 tracking-tight leading-none">Request Logs</h1>
+                </div>
             </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+
+            {/* Toolbar */}
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="relative">
+                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/25" size={12} />
+                    <input
+                        type="text"
+                        placeholder="Search by rule name..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="bg-[#101012] border border-white/[0.07] h-8 text-[11px] rounded-lg pl-8 pr-3 text-white/80 placeholder-white/25 focus:outline-none focus:border-white/[0.15] focus:ring-1 focus:ring-white/[0.08] transition-all font-mono w-56"
+                    />
+                </div>
+                <div className="flex items-center gap-1.5">
+                    {(["all", "allowed", "blocked"] as const).map((s) => (
+                        <button
+                            key={s}
+                            onClick={() => { setStatusFilter(s); setPage(1); }}
+                            className={`h-8 px-3 rounded-lg text-[11px] font-mono capitalize transition-all duration-200 cursor-pointer ${
+                                statusFilter === s
+                                    ? "bg-white/[0.08] text-white/90 border border-white/[0.12]"
+                                    : "text-white/30 hover:text-white/60 border border-transparent hover:bg-white/[0.04]"
+                            }`}
+                        >
+                            {s}
+                        </button>
+                    ))}
+                    <button
+                        onClick={fetchLogs}
+                        disabled={loading}
+                        className="h-8 w-8 flex items-center justify-center rounded-lg border border-white/[0.07] text-white/30 hover:text-white/70 hover:bg-white/[0.04] transition-all cursor-pointer"
+                    >
+                        <RefreshCw size={12} className={loading ? "animate-spin" : ""} />
+                    </button>
+                </div>
+            </div>
+
+            {/* Table */}
+            <div className="bg-[#19191a] border border-white/[0.06] rounded-xl overflow-hidden relative">
+                {loading && (
+                    <div className="absolute inset-0 bg-black/20 z-20 flex items-center justify-center">
+                        <RefreshCw className="animate-spin text-white/40" size={16} />
+                    </div>
+                )}
+
+                <div className="overflow-x-auto min-h-[360px]">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="border-b border-white/[0.05]">
+                                <th className="py-3 px-4 text-[10px] font-mono font-semibold text-white/30 uppercase tracking-widest">Timestamp</th>
+                                <th className="py-3 px-4 text-[10px] font-mono font-semibold text-white/30 uppercase tracking-widest">Identifier</th>
+                                <th className="py-3 px-4 text-[10px] font-mono font-semibold text-white/30 uppercase tracking-widest">Rule</th>
+                                <th className="py-3 px-4 text-[10px] font-mono font-semibold text-white/30 uppercase tracking-widest">Reqs</th>
+                                <th className="py-3 px-4 text-[10px] font-mono font-semibold text-white/30 uppercase tracking-widest text-right">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/[0.03]">
+                            {logs.length > 0 ? (
+                                logs.map((log) => (
+                                    <tr key={log.id} className="group hover:bg-white/[0.02] transition-colors">
+                                        <td className="py-2.5 px-4 whitespace-nowrap">
+                                            <span className="text-[11px] font-mono text-white/40 group-hover:text-white/60 transition-colors">
+                                                {formatDate(log.createdAt)}
+                                            </span>
+                                        </td>
+                                        <td className="py-2.5 px-4 whitespace-nowrap">
+                                            <span className="text-[12px] font-mono text-white/75">{log.identifier}</span>
+                                        </td>
+                                        <td className="py-2.5 px-4 whitespace-nowrap">
+                                            <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.07] text-white/50 font-mono">
+                                                {log.rule}
+                                            </span>
+                                        </td>
+                                        <td className="py-2.5 px-4 whitespace-nowrap">
+                                            <span className="text-[11px] font-mono text-white/40">{log.count}</span>
+                                        </td>
+                                        <td className="py-2.5 px-4 whitespace-nowrap text-right">
+                                            {log.allowed ? (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/[0.07] border border-emerald-500/[0.15] text-emerald-400/70 text-[10px] font-mono">
+                                                    <CheckCircle2 size={9} />allowed
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-500/[0.07] border border-red-500/[0.15] text-red-400/70 text-[10px] font-mono">
+                                                    <XCircle size={9} />blocked
+                                                </span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                !loading && (
+                                    <tr>
+                                        <td colSpan={5} className="py-24 text-center">
+                                            <div className="flex flex-col items-center gap-2">
+                                                <Activity className="text-white/15" size={20} />
+                                                <p className="text-[11px] font-mono text-white/25">no logs found</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Pagination */}
+                {logs.length > 0 && (
+                    <div className="border-t border-white/[0.05] px-4 py-2.5 flex items-center justify-between">
+                        <p className="text-[10px] font-mono text-white/25">
+                            {(page - 1) * limit + 1}–{Math.min(page * limit, totalLogs)} of {totalLogs} entries
+                        </p>
+                        <div className="flex items-center gap-1.5">
+                            <button
+                                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                disabled={page === 1}
+                                className="h-7 w-7 flex items-center justify-center rounded-lg border border-white/[0.07] text-white/30 hover:bg-white/[0.04] hover:text-white/70 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            >
+                                <ChevronLeft size={12} />
+                            </button>
+                            <span className="text-[10px] font-mono text-white/30 px-1">{page} / {totalPages || 1}</span>
+                            <button
+                                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                                disabled={page === totalPages || totalPages === 0}
+                                className="h-7 w-7 flex items-center justify-center rounded-lg border border-white/[0.07] text-white/30 hover:bg-white/[0.04] hover:text-white/70 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            >
+                                <ChevronRight size={12} />
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default LogsPage;

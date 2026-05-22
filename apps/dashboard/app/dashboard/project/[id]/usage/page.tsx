@@ -1,36 +1,26 @@
-import React from 'react';
-import { Hammer, Sparkles } from 'lucide-react';
+import React from "react";
+import { Wrench } from "lucide-react";
 
 const UsagePage = () => {
     return (
-        <div className="max-w-3xl w-full flex flex-col gap-6 animate-in fade-in duration-300">
+        <div className="max-w-5xl w-full flex flex-col gap-5">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-white tracking-tight mb-1">
-                        Usage Analytics
-                    </h1>
-                    <p className="text-sm text-white/50">
-                        Monitor your rate limit rules, request volumes, and blocking patterns.
-                    </p>
+                    <p className="text-[10px] text-white/30 font-mono uppercase tracking-widest mb-1">Project</p>
+                    <h1 className="text-[18px] font-semibold text-white/90 tracking-tight leading-none">Usage Analytics</h1>
                 </div>
             </div>
 
-            {/* Coming Soon Notice */}
-            <div className="flex flex-col items-center justify-center gap-5 bg-[#101012] border border-dashed border-white/10 rounded-2xl py-24 px-8 text-center relative overflow-hidden">
-                {/* Ambient glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center relative z-10 border border-primary/20 shadow-lg shadow-primary/5">
-                    <Hammer size={28} className="text-primary" />
+            {/* Coming soon notice */}
+            <div className="bg-[#19191a] border border-dashed border-white/[0.07] rounded-xl py-20 px-8 flex flex-col items-center justify-center gap-3 text-center">
+                <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.07] flex items-center justify-center">
+                    <Wrench size={15} className="text-white/25" />
                 </div>
-
-                <div className="relative z-10">
-                    <h2 className="text-lg font-semibold text-white/90 mb-2 flex items-center justify-center gap-2">
-                        Under Development <Sparkles size={16} className="text-primary/70" />
-                    </h2>
-                    <p className="text-sm text-white/50 max-w-sm mx-auto leading-relaxed">
-                        We are currently building comprehensive charts and analytics so you can deeply understand your traffic patterns. This feature will be available soon!
+                <div>
+                    <p className="text-[13px] font-mono font-semibold text-white/50 mb-1">under development</p>
+                    <p className="text-[11px] font-mono text-white/25 max-w-xs leading-relaxed">
+                        Detailed charts and analytics for traffic patterns are coming soon.
                     </p>
                 </div>
             </div>
