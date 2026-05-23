@@ -17,8 +17,8 @@
   },
   "favicon": "/favicon.svg",
   "logo": {
-    "light": "./favicon.svg",
-    "dark": "./favicon.svg"
+    "light": "/logo-light.svg",
+    "dark": "/logo-dark.svg"
   },
   "navigation": {
     "tabs": [
@@ -104,7 +104,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:yash@throttlr.dev"
+        "href": "mailto:yashjejurkar.dev@gmail.com"
       }
     ],
     "primary": {
