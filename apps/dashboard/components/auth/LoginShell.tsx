@@ -3,6 +3,9 @@
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 
+
+
+
 const features = [
   {
     icon: "⚡",
@@ -22,7 +25,7 @@ const features = [
 ];
 
 export default function LoginShell() {
-  
+
   const handleGoogleLogin = () => {
     signIn("google",
       {
@@ -34,11 +37,34 @@ export default function LoginShell() {
     <div className="h-screen w-screen bg-[#09090b] text-white flex overflow-hidden">
       {/* ── LEFT PANEL ── */}
       <section className="relative w-full lg:w-[44%] flex flex-col px-10 py-8 border-r border-white/10 bg-[#09090b]">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <h1 className="text-lg font-semibold tracking-tight text-white">
-            Throttlr<span className="text-primary">.</span>
-          </h1>
+        {/* Logo & Docs Link */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg font-semibold tracking-tight text-white">
+              Throttlr<span className="text-primary">.</span>
+            </h1>
+          </div>
+          <a
+            href={process.env.NEXT_PUBLIC_DOCS_URL || process.env.NEXT_PUBLIC_DOC_URL || "http://localhost:3002"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[13px] font-medium text-white/50 hover:text-white hover:bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20 transition-all flex items-center gap-1.5"
+          >
+            <span>Docs</span>
+            <svg
+              className="w-3.5 h-3.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </a>
         </div>
 
         {/* Center content */}
@@ -70,7 +96,16 @@ export default function LoginShell() {
 
           {/* Help Links */}
           <p className="text-[13px] text-white/40 mt-8 text-center">
-            Need help? Read docs or contact support.
+            Need help?{" "}
+            <a
+              href={process.env.NEXT_PUBLIC_DOCS_URL || process.env.NEXT_PUBLIC_DOC_URL || "http://localhost:3002"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:underline transition-colors"
+            >
+              Read docs
+            </a>{" "}
+            or contact support.
           </p>
         </div>
 

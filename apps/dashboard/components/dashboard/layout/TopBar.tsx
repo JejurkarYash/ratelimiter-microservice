@@ -81,6 +81,27 @@ const TopBar = () => {
 
       {/* Right section — Search + Actions */}
       <div className="flex items-center gap-4">
+        <a
+          href={process.env.NEXT_PUBLIC_DOCS_URL || process.env.NEXT_PUBLIC_DOC_URL || "http://localhost:3002"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[13px] font-medium text-white/50 hover:text-white hover:bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20 transition-all flex items-center gap-1.5"
+        >
+          <span>Docs</span>
+          <svg
+            className="w-3.5 h-3.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+            />
+          </svg>
+        </a>
         {/* User Avatar */}
         <UserAvatar />
       </div>

@@ -10,6 +10,9 @@
   "appearance": {
     "default": "dark"
   },
+  "search": {
+    "hideSearch": true
+  },
   "background": {
     "color": {
       "dark": "#0a0a0b"
