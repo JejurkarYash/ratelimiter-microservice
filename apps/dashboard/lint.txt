@@ -1,0 +1,150 @@
+
+> dashboard@0.1.0 lint /Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard
+> eslint
+
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/app/api/auth/[...nextauth]/route.ts
+  43:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/app/dashboard/project/[id]/logs/page.tsx
+  57:24  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/app/dashboard/project/[id]/logs/page.tsx:57:24
+  55 |
+  56 |     useEffect(() => {
+> 57 |         if (projectId) fetchLogs();
+     |                        ^^^^^^^^^ Avoid calling setState() directly within an effect
+  58 |     }, [projectId, page, statusFilter, ruleFilter]);
+  59 |
+  60 |     useEffect(() => {  react-hooks/set-state-in-effect
+  58:8   warning  React Hook useEffect has a missing dependency: 'fetchLogs'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-hooks/exhaustive-deps
+  66:8   warning  React Hook useEffect has a missing dependency: 'page'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              react-hooks/exhaustive-deps
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/app/dashboard/project/[id]/settings/page.tsx
+  27:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/app/dashboard/settings/page.tsx
+  57:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/app/page.tsx
+  1:10  warning  'redirect' is defined but never used          @typescript-eslint/no-unused-vars
+  2:10  warning  'getServerSession' is defined but never used  @typescript-eslint/no-unused-vars
+  3:10  warning  'authOptions' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/ProjectLists.tsx
+  29:9  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/ProjectLists.tsx:29:9
+  27 |
+  28 |     useEffect(() => {
+> 29 |         fetchProjects();
+     |         ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  30 |     }, []);
+  31 |
+  32 |     const filtered = projects.filter((p) =>  react-hooks/set-state-in-effect
+  30:8  warning  React Hook useEffect has a missing dependency: 'fetchProjects'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        react-hooks/exhaustive-deps
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/layout/SideBar.tsx
+  53:25  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/layout/TopBar.tsx
+   4:10  warning  'Search' is defined but never used                               @typescript-eslint/no-unused-vars
+  47:17  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/rules/CreateRuleModal.tsx
+  37:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/rules/RulesList.tsx
+   3:24  warning  'Filter' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  37:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/rules/RulesList.tsx:37:5
+  35 |
+  36 |   useEffect(() => {
+> 37 |     fetchRules();
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  38 |   }, [projectId]);
+  39 |
+  40 |   const handleDelete = async (ruleId: string) => {  react-hooks/set-state-in-effect
+  38:6   warning  React Hook useEffect has a missing dependency: 'fetchRules'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react-hooks/exhaustive-deps
+  45:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/rules/UpdateRuleModal.tsx
+  30:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/dashboard/rules/UpdateRuleModal.tsx:30:13
+  28 |     useEffect(() => {
+  29 |         if (rule && isOpen) {
+> 30 |             setRuleName(rule.name);
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  31 |             setLimit(rule.limit);
+  32 |             setAlgorithm(rule.algorithm);
+  33 |               react-hooks/set-state-in-effect
+  54:25  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-explicit-any
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/project/CreateProjectModal.tsx
+   3:36  warning  'Terminal' is defined but never used      @typescript-eslint/no-unused-vars
+   3:46  warning  'Cpu' is defined but never used           @typescript-eslint/no-unused-vars
+   3:51  warning  'Code' is defined but never used          @typescript-eslint/no-unused-vars
+   3:57  warning  'Layers' is defined but never used        @typescript-eslint/no-unused-vars
+   3:65  warning  'Box' is defined but never used           @typescript-eslint/no-unused-vars
+  48:23  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/project/ProjectOverview.tsx
+    9:3   warning  'Trash2' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   10:3   warning  'Edit2' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   23:36  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-explicit-any
+   40:20  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/components/project/ProjectOverview.tsx:40:20
+  38 |
+  39 |   useEffect(() => {
+> 40 |     if (projectId) fetchOverview();
+     |                    ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  41 |   }, [projectId]);
+  42 |
+  43 |   const handleNewruleButton = () => {  react-hooks/set-state-in-effect
+   41:6   warning  React Hook useEffect has a missing dependency: 'fetchOverview'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+  210:39  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-explicit-any
+  238:40  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-explicit-any
+  291:30  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-explicit-any
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/services/axios.ts
+  13:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/yashjejurkar/Yash Workspace/projects/rate-limiter/apps/dashboard/types/auth/next-auth.d.ts
+  1:8  warning  'NextAuth' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 37 problems (18 errors, 19 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.

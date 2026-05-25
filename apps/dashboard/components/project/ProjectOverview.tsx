@@ -6,8 +6,6 @@ import {
   ShieldAlert,
   Zap,
   RefreshCw,
-  Trash2,
-  Edit2,
   CheckCircle2,
   Plus,
   Key,

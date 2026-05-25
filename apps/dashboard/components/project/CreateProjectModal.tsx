@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { X, Layout, Globe, Server, Terminal, Cpu, Code, Layers, Box, ChevronDown, Check, Loader2 } from 'lucide-react';
+import { X, Layout, Globe, Server, ChevronDown, Check, Loader2 } from 'lucide-react';
 import axiosClient from '@/services/axios';
 
 const BACKEND_FRAMEWORKS = [

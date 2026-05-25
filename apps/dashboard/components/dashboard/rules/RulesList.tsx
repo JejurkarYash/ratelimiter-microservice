@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Search, Plus, Filter } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import RuleCard from "./RuleCard";
 import CreateRuleModal from "./CreateRuleModal";
 import UpdateRuleModal from "./UpdateRuleModal";
@@ -30,7 +30,6 @@ const RulesList = () => {
       `/rules/get-rules?apiKeyId=${projectId}`,
     );
     setRules(response.data);
-    console.log(response.data);
   };
 
   useEffect(() => {
@@ -40,7 +39,6 @@ const RulesList = () => {
   const handleDelete = async (ruleId: string) => {
     try {
       await axiosClient.delete(`/rules/rule/${ruleId}`);
-      console.log("Rule deleted successfully", ruleId);
       setRules(rules.filter((rule: Rule) => rule.id !== ruleId));
     } catch (error: any) {
       console.error("Error deleting rule:", error.response.data);

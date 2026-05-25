@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Search, Workflow } from "lucide-react";
+import { Workflow } from "lucide-react";
 import UserAvatar from "./UserAvatar";
 
 const TopBar = () => {
@@ -44,7 +44,7 @@ const TopBar = () => {
           <span
             className={`text-sm font-medium transition-colors ${projectName ? "text-white/60 group-hover:text-white" : "text-white/90 group-hover:text-white"}`}
           >
-            Yash's Workspace
+            Yash&apos;s Workspace
           </span>
           {!projectName && (
             <svg

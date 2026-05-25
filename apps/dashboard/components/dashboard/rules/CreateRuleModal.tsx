@@ -32,10 +32,9 @@ const CreateRuleModal = ({ isOpen, onClose }: CreateRuleModalProps) => {
                 algorithm,
                 apiKeyId
             });
-            console.log(response);
             onClose();
         } catch (error: any) {
-            console.log("error: ", error.response.data);
+            console.error("Error creating rule:", error.response?.data || error.message);
         }
     };
 

@@ -15,9 +15,7 @@ const ProjectLists = () => {
     const fetchProjects = async () => {
         try {
             const res = await axiosClient.get("/tenant/projects");
-            console.log(res);
             setProjects(res.data);
-            console.log(projects);
         } catch (err) {
             console.error("Failed to fetch projects:", err);
         } finally {
