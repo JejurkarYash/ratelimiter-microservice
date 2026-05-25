@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import redisClient from "../lib/redis";
+import logger from "../lib/logger.js";
 
 export async function ipRateLimiting(
   req: Request,
@@ -40,6 +41,7 @@ export async function ipRateLimiting(
     )) as [number, number, number];
 
     if (result[0] == 0) {
+      logger.warn("IP Rate Limit: Limit exceeded for IP", { ip, key, limit });
       return res.status(429).json({
         error: {
           code: "IP_RATE_LIMIT_EXCEEDED",
@@ -51,8 +53,11 @@ export async function ipRateLimiting(
 
     // calling next function
     next();
-  } catch (err) {
-    console.error(`Error ipRateLimit : `, err);
+  } catch (err: any) {
+    logger.error("IP Rate Limit: Error in rate limit evaluation", {
+      ip,
+      error: err.message || err,
+    });
     return res.status(500).json({
       error: {
         code: "INTERNAL_ERROR",

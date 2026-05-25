@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { hashApiKey } from "../utils/hashApiKey";
 import { prisma } from "@repo/db";
+import logger from "../lib/logger.js";
 
 declare global {
   namespace Express {
@@ -20,6 +21,7 @@ export async function apiKeyMiddleware(
   const apiKey = req.headers["x-api-key"] as string;
 
   if (!apiKey) {
+    logger.warn("API Key Middleware: API key not found in request headers");
     return res.status(401).json({
       error: {
         code: "APIKEY_NOT_FOUND",
@@ -39,6 +41,9 @@ export async function apiKeyMiddleware(
     });
 
     if (!validApiKeys || !validApiKeys.isActive) {
+      logger.warn("API Key Middleware: Invalid or inactive API key provided", {
+        apiKeyMasked: `sk_****${apiKey.slice(-6)}`,
+      });
       return res.status(401).json({
         error: {
           code: "INVALID_API_KEY",
@@ -50,8 +55,10 @@ export async function apiKeyMiddleware(
     req.plan = validApiKeys.tenant.plan;
     req.apiKeyId = validApiKeys.id;
     next();
-  } catch (err) {
-    console.error("Error in middleware :", err);
+  } catch (err: any) {
+    logger.error("API Key Middleware: Error in middleware execution", {
+      error: err.message || err,
+    });
     return res.status(500).json({
       error: {
         code: "INTERNAL_ERROR",

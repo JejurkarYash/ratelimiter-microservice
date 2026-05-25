@@ -1,7 +1,8 @@
 import { prisma } from "@repo/db";
 import type { Request, Response } from "express";
-import { fixedWindow } from "../services/fixedWindow";
-import { slidingWindow } from "../services/slidingWindow";
+import { fixedWindow } from "../services/fixedWindow.js";
+import { slidingWindow } from "../services/slidingWindow.js";
+import logger from "../lib/logger.js";
 
 export async function sdkCheck(req: Request, res: Response) {
   const tenantId = req.tenantId;
@@ -11,6 +12,7 @@ export async function sdkCheck(req: Request, res: Response) {
   const apiKeyId = req.apiKeyId;
 
   if (!ruleName || !identifier) {
+    logger.warn("SDK Controller: Missing required fields in limit check", { ruleName, identifier });
     return res.status(400).json({
       allowed: false,
       error: {
@@ -32,6 +34,7 @@ export async function sdkCheck(req: Request, res: Response) {
     });
 
     if (!rule) {
+      logger.warn("SDK Controller: Rule not found for key", { apiKeyId, ruleName });
       return res.status(404).json({
         error: {
           code: "RULE_NOT_FOUND",
@@ -71,7 +74,17 @@ export async function sdkCheck(req: Request, res: Response) {
           apiKeyId: apiKeyId,
         },
       })
-      .catch(console.error);
+      .catch((logErr) => logger.error("SDK Controller: UsageLog creation failed", { error: logErr.message || logErr }));
+
+    logger.info("SDK Controller: Rate limit request processed", {
+      tenantId,
+      apiKeyId,
+      ruleName,
+      identifier,
+      allowed: result.allowed,
+      count: result.count,
+      remaining: result.remaining,
+    });
 
     // returning the result
     return res.status(result.allowed ? 200 : 429).json({
@@ -87,8 +100,8 @@ export async function sdkCheck(req: Request, res: Response) {
         },
       }),
     });
-  } catch (err) {
-    console.error("sdkCheck error ", err);
+  } catch (err: any) {
+    logger.error("SDK Controller: Error executing check", { error: err.message || err });
     return res.status(500).json({
       error: {
         code: "INTERNAL_ERROR",
@@ -97,3 +110,4 @@ export async function sdkCheck(req: Request, res: Response) {
     });
   }
 }
+

@@ -5,19 +5,21 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { prisma } from "@repo/db";
+import logger from "../lib/logger.js";
 
 // Load environment variables from .env file
 dotenv.config();
 
 export default async function authController(req: Request, res: Response) {
   try {
-    console.log("control reach here");
     const parsedData = authSchema.safeParse(req.body);
 
     if (!parsedData.success) {
       throw parsedData.error;
     }
     const { name, email, password } = parsedData.data;
+
+    logger.info("Auth Controller: Login/signup attempt initiated", { email });
 
     // Check if user already exists
     const existingUser = await prisma.tenant.findUnique({
@@ -26,13 +28,13 @@ export default async function authController(req: Request, res: Response) {
       },
     });
 
-    console.log("jwt secret in auth controller", process.env.JWT_SECRET); // Debugging log to check the JWT secret value in authController
     if (existingUser) {
       const isPasswordValid = await bcrypt.compare(
         password,
         existingUser.password,
       );
       if (!isPasswordValid) {
+        logger.warn("Auth Controller: Login failed - invalid password provided", { email });
         return res.status(401).json({
           message: "Invalid Credentials",
           status: "Unauthorized",
@@ -44,8 +46,11 @@ export default async function authController(req: Request, res: Response) {
         { tenantId: existingUser.id, email: existingUser.email },
         process.env.JWT_SECRET as string,
       );
-      console.log("token length creating", token.length);
       if (token) {
+        logger.info("Auth Controller: Existing user logged in successfully", {
+          tenantId: existingUser.id,
+          email: existingUser.email,
+        });
         return res.status(200).json({
           message: "Login Successful",
           status: "OK",
@@ -71,8 +76,11 @@ export default async function authController(req: Request, res: Response) {
         { tenantId: user.id, email: user.email },
         process.env.JWT_SECRET as string,
       );
-      console.log("token length creating", token.length);
       if (token) {
+        logger.info("Auth Controller: New user registered and logged in successfully", {
+          tenantId: user.id,
+          email: user.email,
+        });
         return res.status(201).json({
           message: "User Created and Login Successful",
           status: "Created",
@@ -83,6 +91,9 @@ export default async function authController(req: Request, res: Response) {
     }
   } catch (error: any) {
     if (error instanceof ZodError) {
+      logger.warn("Auth Controller: Validation error during auth request", {
+        errors: error.flatten().fieldErrors,
+      });
       res.status(400).json({
         message: "Validation Error",
         errors: error.flatten().fieldErrors,
@@ -90,6 +101,9 @@ export default async function authController(req: Request, res: Response) {
         statusCode: 400,
       });
     } else {
+      logger.error("Auth Controller: Unexpected error occurred during authentication", {
+        error: error.message || error,
+      });
       res.status(500).json({
         message: "Internal Server Error",
         status: "Error",

@@ -3,11 +3,13 @@ import { prisma } from "@repo/db";
 import { generateRawApiKey } from "../utils/generateRawApiKey.js";
 import { hashApiKey } from "../utils/hashApiKey.js";
 import { resetLimitFunction } from "../services/resetLimit.js";
+import logger from "../lib/logger.js";
 
 export async function getProjects(req: Request, res: Response) {
   const tenantId = req.tenantId;
 
   if (!tenantId) {
+    logger.warn("Tenant Controller: getProjects - Tenant ID not found in request");
     return res.status(400).json({ error: "Tenant ID not found in request" });
   }
 
@@ -59,8 +61,10 @@ export async function getProjects(req: Request, res: Response) {
       })
     );
 
+    logger.info("Tenant Controller: getProjects - list retrieved successfully", { tenantId, count: projectsWithStats.length });
     return res.status(200).json(projectsWithStats);
-  } catch (error) {
+  } catch (error: any) {
+    logger.error("Tenant Controller: getProjects - unexpected failure", { tenantId, error: error.message || error });
     return res.status(500).json({ error: "Internal Server Error", details: error });
   }
 }
@@ -69,10 +73,17 @@ export async function getProjectOverview(req: Request, res: Response) {
   const tenantId = req.tenantId;
   const id = req.params.id as string; // Project (ApiKey) ID
 
-  if (!tenantId) return res.status(400).json({ error: "Tenant ID not found in request" });
-  if (!id) return res.status(400).json({ error: "Project ID is required" });
+  if (!tenantId) {
+    logger.warn("Tenant Controller: getProjectOverview - Tenant ID not found in request");
+    return res.status(400).json({ error: "Tenant ID not found in request" });
+  }
+  if (!id) {
+    logger.warn("Tenant Controller: getProjectOverview - Project ID missing", { tenantId });
+    return res.status(400).json({ error: "Project ID is required" });
+  }
 
   try {
+    logger.info("Tenant Controller: getProjectOverview - fetching project overview details", { tenantId, projectId: id });
     const apiKey = await prisma.apiKey.findUnique({
       where: { id, tenantId },
       include: {
@@ -81,6 +92,7 @@ export async function getProjectOverview(req: Request, res: Response) {
     });
 
     if (!apiKey) {
+      logger.warn("Tenant Controller: getProjectOverview - project not found", { tenantId, projectId: id });
       return res.status(404).json({ error: "Project not found" });
     }
 
@@ -111,6 +123,7 @@ export async function getProjectOverview(req: Request, res: Response) {
 
     const allowedRequests = totalRequests - blockedRequests;
 
+    logger.info("Tenant Controller: getProjectOverview - details fetched successfully", { tenantId, projectId: id });
     return res.status(200).json({
       project: {
         id: apiKey.id,
@@ -129,8 +142,8 @@ export async function getProjectOverview(req: Request, res: Response) {
       rules: apiKey.rules
     });
 
-  } catch (error) {
-    console.error("Project overview error:", error);
+  } catch (error: any) {
+    logger.error("Tenant Controller: getProjectOverview - unexpected error", { tenantId, projectId: id, error: error.message || error });
     return res.status(500).json({ error: "Internal Server Error" });
   }
 }
@@ -139,12 +152,14 @@ export async function getTenantInfo(req: Request, res: Response) {
   const tenantId = req.tenantId;
 
   if (!tenantId) {
+    logger.warn("Tenant Controller: getTenantInfo - Tenant ID not found in request");
     return res.status(400).json({
       error: "Tenant ID not found in request",
     });
   }
 
   try {
+    logger.info("Tenant Controller: getTenantInfo - fetching profile info", { tenantId });
     const tenantInfo = await prisma.tenant.findUnique({
       where: {
         id: tenantId,
@@ -152,15 +167,18 @@ export async function getTenantInfo(req: Request, res: Response) {
     });
 
     if (!tenantInfo) {
+      logger.warn("Tenant Controller: getTenantInfo - tenant profile not found", { tenantId });
       return res.status(404).json({
         error: "Tenant not found",
       });
     }
 
+    logger.info("Tenant Controller: getTenantInfo - profile info successfully fetched", { tenantId });
     return res.status(200).json({
       tenantInfo,
     });
-  } catch (error) {
+  } catch (error: any) {
+    logger.error("Tenant Controller: getTenantInfo - unexpected failure", { tenantId, error: error.message || error });
     return res.status(500).json({
       error: "Internal Server Error",
     });
@@ -172,18 +190,21 @@ export async function generateApiKey(req: Request, res: Response) {
   const name = req.body.name;
 
   if (!tenantId) {
+    logger.warn("Tenant Controller: generateApiKey - Tenant ID not found in request");
     return res.status(400).json({
       error: "Tenant ID not found in request",
     });
   }
 
   if (!name) {
+    logger.warn("Tenant Controller: generateApiKey - API key name missing", { tenantId });
     return res.status(400).json({
       error: "API key name not found in request",
     });
   }
 
   try {
+    logger.info("Tenant Controller: generateApiKey - generating raw API key and hashing", { tenantId, name });
     const rawApiKey = generateRawApiKey();
     const hashedApiKey = hashApiKey(rawApiKey);
 
@@ -195,12 +216,14 @@ export async function generateApiKey(req: Request, res: Response) {
       },
     });
 
+    logger.info("Tenant Controller: generateApiKey - key generated successfully", { tenantId, name, apiKeyId: apiKey.id });
     return res.status(201).json({
       message: "API Key generated successfully",
       apiKeyId: apiKey.id,
       apiKey: rawApiKey,
     });
-  } catch (error) {
+  } catch (error: any) {
+    logger.error("Tenant Controller: generateApiKey - unexpected error", { tenantId, name, error: error.message || error });
     return res.status(500).json({
       error: "Internal Server Error",
       errorDetails: error,
@@ -209,15 +232,16 @@ export async function generateApiKey(req: Request, res: Response) {
 }
 
 export async function deleteApiKey(req: Request, res: Response) {
+  const apiKeyId = req.params.id;
   try {
-    const apiKeyId = req.params.id;
-
     if (!apiKeyId) {
+      logger.warn("Tenant Controller: deleteApiKey - API Key ID not found in request params");
       return res.status(400).json({
         error: "API Key ID not found in request",
       });
     }
 
+    logger.info("Tenant Controller: deleteApiKey - deleting API key", { apiKeyId });
     const deletedApiKey = await prisma.apiKey.delete({
       where: {
         id: apiKeyId as string,
@@ -225,29 +249,38 @@ export async function deleteApiKey(req: Request, res: Response) {
     });
 
     if (!deletedApiKey) {
+      logger.warn("Tenant Controller: deleteApiKey - target key not found", { apiKeyId });
       return res.status(404).json({
         error: "API Key not found",
       });
     }
 
+    logger.info("Tenant Controller: deleteApiKey - key deleted successfully", { apiKeyId });
     return res.status(200).json({
       message: "API Key deleted successfully",
       apiKey: deletedApiKey,
     });
-  } catch (err) { }
+  } catch (err: any) {
+    logger.error("Tenant Controller: deleteApiKey - exception occurred during deletion", { apiKeyId, error: err.message || err });
+    return res.status(500).json({
+      error: "Internal Server Error",
+      errorDetails: err,
+    });
+  }
 }
 
 export async function getUsage(req: Request, res: Response) {
-  try {
-    const tenantId = req.tenantId;
-    const identifier = req.params.identifier as string | undefined;
-    const rule = req.query.rule as string | undefined;
-    const from = req.query.from as string | undefined;
-    const to = req.query.to as string | undefined;
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 50;
+  const tenantId = req.tenantId;
+  const identifier = req.params.identifier as string | undefined;
+  const rule = req.query.rule as string | undefined;
+  const from = req.query.from as string | undefined;
+  const to = req.query.to as string | undefined;
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 50;
 
+  try {
     if (!identifier) {
+      logger.warn("Tenant Controller: getUsage - identifier parameter missing", { tenantId });
       return res.status(404).json({
         error: {
           code: "IDENTIFER_REQUIRED",
@@ -255,6 +288,8 @@ export async function getUsage(req: Request, res: Response) {
         },
       });
     }
+
+    logger.info("Tenant Controller: getUsage - fetching usage records", { tenantId, identifier, rule, page, limit });
 
     // reusable where clause
     const where = {
@@ -302,6 +337,7 @@ export async function getUsage(req: Request, res: Response) {
     const blockRate =
       total > 0 ? ((blockedCount / total) * 100).toFixed(1) + "%" : "0%";
 
+    logger.info("Tenant Controller: getUsage - usage logs loaded", { tenantId, identifier, totalLogs: logs.length });
     return res.status(200).json({
       identifier,
       ...(rule && { rule }),
@@ -318,8 +354,8 @@ export async function getUsage(req: Request, res: Response) {
       },
       logs,
     });
-  } catch (err) {
-    console.error(`getUsage Error `, err);
+  } catch (err: any) {
+    logger.error("Tenant Controller: getUsage - failed fetching records", { tenantId, identifier, error: err.message || err });
     return res.status(500).json({
       code: "INTERNAL_ERROR",
       message: "something went wrong on our end",
@@ -332,10 +368,11 @@ export async function resetLimit(req: Request, res: Response) {
   const tenantId = req.tenantId;
 
   if (!tenantId) {
-    res.status(404).json({
+    logger.warn("Tenant Controller: resetLimit - Tenant ID not found in request");
+    return res.status(404).json({
       error: {
         code: "TENANT_ID_REQUIRED",
-        message: "Provide tenandId!",
+        message: "Provide tenantId!",
       },
     });
   }
@@ -345,6 +382,7 @@ export async function resetLimit(req: Request, res: Response) {
   const apiKeyId = req.body.apiKeyId;
 
   try {
+    logger.info("Tenant Controller: resetLimit - attempting to reset limit for identifier", { tenantId, identifier, ruleName, apiKeyId });
     const rule = await prisma.rule.findUnique({
       where: {
         apiKeyId_name: {
@@ -355,6 +393,7 @@ export async function resetLimit(req: Request, res: Response) {
     });
 
     if (!rule) {
+      logger.warn("Tenant Controller: resetLimit - rule name match not found", { tenantId, ruleName, apiKeyId });
       return res.status(404).json({
         error: {
           code: "RULE_NOT_FOUND",
@@ -373,12 +412,14 @@ export async function resetLimit(req: Request, res: Response) {
     );
 
     if (result > 0) {
+      logger.info("Tenant Controller: resetLimit - limit reset successfully", { tenantId, identifier, ruleName });
       return res.status(200).json({
         message: `Reset Successfull for ${identifier}`,
         identifier,
         rule: ruleName,
       });
     } else {
+      logger.info("Tenant Controller: resetLimit - no active limit reset", { tenantId, identifier, ruleName });
       return res.status(200).json({
         message: `No active limit found for ${identifier} — already cleared or never set`,
         identifier,
@@ -386,8 +427,8 @@ export async function resetLimit(req: Request, res: Response) {
         status: "NOT_FOUND", // nothing to reset, but not an error
       });
     }
-  } catch (err) {
-    console.error(`Error ResetLimit Fixed Window : `, err);
+  } catch (err: any) {
+    logger.error("Tenant Controller: resetLimit - error during operation execution", { tenantId, identifier, ruleName, error: err.message || err });
     return res.status(500).json({
       error: {
         code: "INTERNAL_ERROR",
@@ -398,24 +439,26 @@ export async function resetLimit(req: Request, res: Response) {
   }
 }
 
-
 export async function getProjectLogs(req: Request, res: Response) {
+  const tenantId = req.tenantId;
+  const apiKeyId = req.params.id as string;
+
+  if (!tenantId) {
+    logger.warn("Tenant Controller: getProjectLogs - Tenant ID not found in request");
+    return res.status(400).json({ error: "Tenant ID not found in request" });
+  }
+  if (!apiKeyId) {
+    logger.warn("Tenant Controller: getProjectLogs - Project ID is required but missing", { tenantId });
+    return res.status(400).json({ error: "Project ID is required" });
+  }
+
+  const rule = req.query.rule as string | undefined;
+  const statusStr = req.query.status as string | undefined; // "allowed" | "blocked" | "all"
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 50;
+
   try {
-    const tenantId = req.tenantId;
-    const apiKeyId = req.params.id as string;
-
-    if (!tenantId) {
-      return res.status(400).json({ error: "Tenant ID not found in request" });
-    }
-    if (!apiKeyId) {
-      return res.status(400).json({ error: "Project ID is required" });
-    }
-
-    const rule = req.query.rule as string | undefined;
-    const statusStr = req.query.status as string | undefined; // "allowed" | "blocked" | "all"
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 50;
-
+    logger.info("Tenant Controller: getProjectLogs - loading project logs list", { tenantId, apiKeyId, rule, status: statusStr, page, limit });
     let allowedFilter: boolean | undefined = undefined;
     if (statusStr === "allowed") allowedFilter = true;
     if (statusStr === "blocked") allowedFilter = false;
@@ -445,6 +488,7 @@ export async function getProjectLogs(req: Request, res: Response) {
       }),
     ]);
 
+    logger.info("Tenant Controller: getProjectLogs - logs loaded successfully", { tenantId, apiKeyId, loadedLogsCount: logs.length, totalCount: total });
     return res.status(200).json({
       total,
       page,
@@ -452,8 +496,9 @@ export async function getProjectLogs(req: Request, res: Response) {
       totalPages: Math.ceil(total / limit),
       logs,
     });
-  } catch (error) {
-    console.error("Error fetching project logs:", error);
+  } catch (error: any) {
+    logger.error("Tenant Controller: getProjectLogs - unexpected failure loading logs", { tenantId, apiKeyId, error: error.message || error });
     return res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
