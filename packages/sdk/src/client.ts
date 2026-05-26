@@ -1,7 +1,6 @@
 import { RateLimiterConfig, CheckParams, CheckResult } from "./types";
 import { RateLimiterError } from "./error";
-
-const DEFAULT_BASE_URL = "http://localhost:3000/sdk";
+const DEFAULT_BASE_URL = "http://localhost:3001/sdk";
 
 export class RateLimiter {
   private apiKey: string;

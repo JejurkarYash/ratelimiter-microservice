@@ -29,7 +29,7 @@ export function RateLimitermiddleware(config: MiddlewareConfig) {
         return res.status(429).json({
           error: {
             code: "RATE_LIMIT_EXCEED",
-            message: "To Many Reqeusts",
+            message: "Too Many Requests",
           },
         });
       }
@@ -46,3 +46,9 @@ export function RateLimitermiddleware(config: MiddlewareConfig) {
     }
   };
 }
+
+export function rateLimiterMiddleware(config: MiddlewareConfig) {
+  return RateLimitermiddleware(config);
+}
+
+export const RateLimiterMiddleware = RateLimitermiddleware;

@@ -30,5 +30,5 @@ export interface CheckResult {
 export interface MiddlewareConfig {
   limiter: RateLimiter;
   rule: string;
-  identifierFn: (req: Request) => string;
+  identifierFn?: (req: Request) => string;
 }

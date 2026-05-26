@@ -6,7 +6,7 @@ export class RateLimiterError extends Error {
     super(message);
     Object.setPrototypeOf(this, RateLimiterError.prototype);
     this.code = code;
-    this.name = "RateLimiterError",
+    this.name = "RateLimiterError";
     this.statusCode = statusCode;
   }
 }
