@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Component as CTAButton } from "@/components/ui/button-1";
+import TerminalLogCard from "./TerminalLogCard";
 
 export default function Hero() {
   return (
@@ -30,26 +31,52 @@ export default function Hero() {
         }}
       />
 
-      <div className="max-w-[1440px] mx-auto w-full px-4  pt-10 pb-20  lg:pb-32 min-h-full flex flex-col lg:flex-row items-center justify-between gap-12  ">
+      <div className="max-w-[1440px] mx-auto w-full px-6 pt-10 pb-20 lg:pb-32 min-h-full flex flex-col lg:flex-row items-center justify-between gap-12  ">
         {/* Left vertical border line matching the Navbar */}
-        <div className="absolute left-[39px] -top-[1px] bottom-0 w-px bg-zinc-800 pointer-events-none" />
+        <div className="absolute left-6 -top-[1px] bottom-0 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
 
         {/* Right vertical border line matching the Navbar */}
-        <div className="absolute right-[39px] -top-[1px] bottom-0 w-px bg-zinc-800 pointer-events-none" />
+        <div className="absolute right-6 -top-[1px] bottom-0 w-px bg-zinc-800 pointer-events-none  mr-[15px]" />
 
         <div className="flex-1 z-10 select-none ml-6 pt-0 pb-4 px-4">
           <div>
+            {/* SaaS Version Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-950/60 text-[11px] font-medium text-zinc-400 font-mono mb-6 hover:border-zinc-700 transition-colors cursor-default w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F97316] animate-pulse" />
+              <span>Now in Public Beta</span>
+            </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-white font-mono leading-none mb-10">
+            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-medium tracking-tight text-white font-sans leading-[1.1] mb-6">
               Next Generation
               <br />
-              <span className="relative inline-block mt-4 text-white">
+              <span className="relative inline-block mt-2 text-white pb-1">
                 Rate Limiting
-
+                <svg
+                  className="absolute -bottom-2 left-0 w-full h-3 text-[#F97316] pointer-events-none select-none"
+                  viewBox="0 0 100 10"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    d="M 1 4 Q 25 1, 55 3 T 99 2"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    fill="none"
+                    className="opacity-95"
+                  />
+                  <path
+                    d="M 5 7 Q 35 4, 70 6 T 95 5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    fill="none"
+                    className="opacity-85"
+                  />
+                </svg>
               </span>
             </h1>
-            <p className="text-md  text-[#71717a] font-mono max-w-xl leading-relaxed">
-              Drop-in SDK middleware. <span className=" text-[#a1a1aa]">Redis-powered.</span><span className=" text-[#a1a1aa]">Sub-millisecond</span> decisions at any scale.
+            <p className="text-lg text-zinc-400 font-sans max-w-xl leading-relaxed">
+              Drop-in SDK middleware. <span className="text-white font-semibold">Redis-powered.</span> <span className="text-white font-semibold">Sub-millisecond</span> decisions at any scale.
             </p>
           </div>
 
@@ -111,80 +138,8 @@ export default function Hero() {
         </div>
 
         {/* ── RIGHT PANEL: CODE INTERACTIVE CONTAINER ── */}
-        <div className="w-full lg:w-auto pr-[5px] z-10 flex justify-center lg:justify-end">
-          <div className="w-full max-w-[480px] bg-[#121214] border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden font-mono text-[13px] leading-relaxed">
-            {/* Terminal Titlebar Header */}
-            <div className="flex items-center gap-1.5 px-5 py-4 border-b border-zinc-900 bg-[#0d0d0f]">
-              <span className="w-3 h-3 rounded-full bg-[#ff5f56]" />
-              <span className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-              <span className="w-3 h-3 rounded-full bg-[#27c93f]" />
-            </div>
-
-            {/* Code Content Container */}
-            <div className="p-6 text-zinc-300 space-y-4">
-              {/* Terminal Install Prompt */}
-              <div className="flex items-center gap-2">
-                <span className="text-[#F97316]">$</span>
-                <span>
-                  npm install <span className="text-[#F97316]">throttlr</span>
-                </span>
-              </div>
-
-              {/* Code Script Block */}
-              <div className="space-y-1 pt-2 border-t border-zinc-900">
-                <div className="text-zinc-500 font-medium">// basic usage</div>
-
-                <div>
-                  <span className="text-[#ea580c]">import</span>{" "}
-                  <span className="text-white">&#123;</span> Throttlr{" "}
-                  <span className="text-white">&#125;</span>{" "}
-                  <span className="text-[#ea580c]">from</span>{" "}
-                  <span className="text-cyan-400">&apos;throttlr&apos;</span>
-                  <span className="text-zinc-500">;</span>
-                </div>
-
-                <div className="pt-2">
-                  <span className="text-[#ea580c]">const</span> limiter{" "}
-                  <span className="text-white">=</span>{" "}
-                  <span className="text-[#ea580c]">new</span>{" "}
-                  <span className="text-white">Throttlr(</span>
-                  <span className="text-white">&#123;</span>
-                </div>
-
-                <div className="pl-4">
-                  points<span className="text-zinc-500">:</span>{" "}
-                  <span className="text-[#F97316]">10</span>
-                  <span className="text-zinc-500">,</span>
-                </div>
-
-                <div className="pl-4">
-                  duration<span className="text-zinc-500">:</span>{" "}
-                  <span className="text-[#F97316]">60</span>
-                  <span className="text-zinc-500">,</span>{" "}
-                  <span className="text-zinc-500 font-medium">// seconds</span>
-                </div>
-
-                <div className="pl-4">
-                  driver<span className="text-zinc-500">:</span>{" "}
-                  <span className="text-cyan-400">&apos;redis&apos;</span>
-                </div>
-
-                <div>
-                  <span className="text-white">&#125;</span>
-                  <span className="text-white">)</span>
-                  <span className="text-zinc-500">;</span>
-                </div>
-
-                <div className="pt-2">
-                  <span className="text-[#ea580c]">await</span> limiter
-                  <span className="text-zinc-400">.</span>
-                  <span className="text-white">consume(</span>ipAddress
-                  <span className="text-white">)</span>
-                  <span className="text-zinc-500">;</span>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="w-full lg:flex-1 max-w-[580px] pr-[5px] mr-6 z-10 flex justify-center lg:justify-end">
+          <TerminalLogCard />
         </div>
       </div>
     </section>
