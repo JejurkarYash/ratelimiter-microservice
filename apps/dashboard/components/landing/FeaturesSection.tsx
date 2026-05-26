@@ -163,7 +163,7 @@ export default function FeaturesSection() {
   }, []);
 
   return (
-    <section className="w-full bg-[#0d0d0f] py-20 border-b border-zinc-900 select-none">
+    <section className="w-full bg-[#0d0d0f] pt-20 pb-0 border-b border-zinc-800 select-none">
 
       {/* CSS Keyframes for Hexagon Pulse and Pipeline request dot flow */}
       <style dangerouslySetInnerHTML={{
@@ -282,8 +282,8 @@ export default function FeaturesSection() {
                       <div
                         key={i}
                         className={`w-12 h-10 border rounded flex flex-wrap items-center justify-center p-1 transition-all ${isActive
-                            ? "bg-[#1c0e04] border-[#7c2d12]"
-                            : "bg-[#27272a]/20 border-[#27272a]"
+                          ? "bg-[#1c0e04] border-[#7c2d12]"
+                          : "bg-[#27272a]/20 border-[#27272a]"
                           }`}
                       >
                         {isActive && Array.from({ length: fixedRequestCount }).map((_, dotIndex) => (

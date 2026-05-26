@@ -2,6 +2,7 @@ import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
 import LiveDemoSection from "@/components/landing/LiveDemoSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
+import HowItWorksSection from "@/components/landing/HowItWorksSection";
 
 export default async function Home() {
   return (
@@ -10,6 +11,7 @@ export default async function Home() {
       <Hero />
       <LiveDemoSection />
       <FeaturesSection />
+      <HowItWorksSection />
     </div>
   );
 }
