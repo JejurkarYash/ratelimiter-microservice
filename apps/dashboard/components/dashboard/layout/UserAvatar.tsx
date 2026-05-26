@@ -88,7 +88,7 @@ export default function UserAvatar() {
                     {/* Actions */}
                     <div className="p-1">
                         <button
-                            onClick={() => signOut({ callbackUrl: "/login" })}
+                            onClick={() => signOut({ callbackUrl: "/" })}
                             className="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg text-[13px] text-red-500/60 hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
                         >
                             <LogOut size={14} />

@@ -1,15 +1,14 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-// ── TYPE DEFINITIONS ──
 interface BarItem {
   height: number;
   type: "allowed" | "blocked";
 }
 
 export default function FeaturesSection() {
-  // ── CARD 1 STATE (Redis Lua Pipeline) ──
   const [pipelineTick, setPipelineTick] = useState(0);
 
   useEffect(() => {
@@ -19,17 +18,14 @@ export default function FeaturesSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // ── CARD 2 STATE (Fixed & Sliding Algorithms) ──
   const [slidingTick, setSlidingTick] = useState(0);
   const [fixedRequestCount, setFixedRequestCount] = useState(0);
 
   useEffect(() => {
-    // Animate sliding window loop every 3s
     const slidingInterval = setInterval(() => {
       setSlidingTick((prev) => prev + 1);
     }, 3000);
 
-    // Animate fixed window dots filling up
     const fixedInterval = setInterval(() => {
       setFixedRequestCount((prev) => (prev >= 6 ? 1 : prev + 1));
     }, 500);
@@ -40,7 +36,6 @@ export default function FeaturesSection() {
     };
   }, []);
 
-  // ── CARD 3 STATE (Drop-in SDK Typewriter) ──
   const line1 = "import { Throttlr } from '@throttlr/sdk'";
   const line2 = "const throttlr = new Throttlr({ apiKey })";
   const line3 = "await throttlr.check({ rule, identifier })";
@@ -85,7 +80,6 @@ export default function FeaturesSection() {
     }
   }, [currentLineIndex, currentCharIndex, isPaused]);
 
-  // Helpers to render typewritten syntax highlighted rows
   const renderLine1 = (count: number) => {
     const text = line1.slice(0, count);
     return (
@@ -130,7 +124,6 @@ export default function FeaturesSection() {
     );
   };
 
-  // ── CARD 4 STATE (Real-time Analytics Bar Chart) ──
   const [bars, setBars] = useState<BarItem[]>([
     { height: 40, type: "allowed" },
     { height: 65, type: "allowed" },
@@ -151,7 +144,7 @@ export default function FeaturesSection() {
       setBars((prevBars) => {
         const randomIndex = Math.floor(Math.random() * 12);
         const nextBars = [...prevBars];
-        const nextHeight = Math.floor(Math.random() * 80) + 15; // Between 15% and 95%
+        const nextHeight = Math.floor(Math.random() * 80) + 15;
         nextBars[randomIndex] = {
           ...nextBars[randomIndex],
           height: nextHeight,
@@ -162,10 +155,31 @@ export default function FeaturesSection() {
     return () => clearInterval(chartInterval);
   }, []);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1] as const
+      }
+    }
+  };
+
   return (
     <section className="w-full bg-[#0d0d0f] pt-20 pb-0 border-b border-zinc-800 select-none">
-
-      {/* CSS Keyframes for Hexagon Pulse and Pipeline request dot flow */}
       <style dangerouslySetInnerHTML={{
         __html: `
         @keyframes req-flow {
@@ -188,40 +202,46 @@ export default function FeaturesSection() {
       `}} />
 
       <div className="max-w-[1440px] mx-auto px-6 relative">
-
-        {/* Decorative Grid Lines aligning with Navbar, Hero & Live Demo */}
         <div className="absolute left-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
         <div className="absolute right-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px]" />
 
-        {/* Section Header */}
-        <div className="text-center flex flex-col items-center pb-16">
-          {/* <span className="font-mono text-[13px] text-[#ea580c] font-semibold tracking-wider uppercase mb-3">
-            Why Throttlr
-          </span> */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center flex flex-col items-center pb-16"
+        >
           <h2
-            className="text-3xl sm:text-4xl md:text-4xl font-semibold text-white leading-tight"
+            className="text-3xl sm:text-4xl md:text-4xl font-semibold text-white leading-tight font-sans"
             style={{ letterSpacing: '-0.04em' }}
           >
             Protect your API. Ship faster.
           </h2>
-        </div>
+        </motion.div>
 
-        {/* Horizontal Divider Line */}
-        <div className="w-full border-t border-zinc-800 pointer-events-none" />
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="w-full border-t border-zinc-800 pointer-events-none origin-left"
+        />
 
-        {/* 2x2 Feature Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full">
-
-          {/* ── CARD 1: REDIS LUA ── */}
-          <div className="bg-[#111113]/50 border-b md:border-r border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300">
-
-            {/* Live pipeline asset */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full"
+        >
+          <motion.div
+            variants={cardVariants}
+            className="bg-[#111113]/50 border-b md:border-r border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
+          >
             <div className="relative w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 overflow-hidden flex items-center justify-center">
-
-              {/* Dashed timeline pipeline line */}
               <div className="absolute left-10 right-10 top-[90px] border-t-2 border-dashed border-[#27272a] -z-10" />
 
-              {/* Animating request pill */}
               <span
                 key={pipelineTick}
                 style={{ animation: "req-flow 2s infinite linear" }}
@@ -230,30 +250,25 @@ export default function FeaturesSection() {
                 req
               </span>
 
-              {/* Left Column: Input req source */}
               <div className="absolute left-6 top-[76px] bg-zinc-900 border border-zinc-800 text-zinc-500 px-2 py-1 rounded text-[11px] font-mono leading-none z-10">
                 client
               </div>
 
-              {/* Center Column: Redis Hexagon Node */}
               <div
                 style={{ animation: "redis-pulse 2s infinite ease-in-out" }}
                 className="absolute left-1/2 top-[60px] -translate-x-1/2 w-[60px] h-[60px] flex items-center justify-center z-10 cursor-default"
               >
-                {/* SVG Hexagon background */}
                 <svg className="absolute inset-0 w-full h-full text-[#ea580c]/10 fill-current stroke-[#ea580c] stroke-2" viewBox="0 0 100 100">
                   <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
                 </svg>
                 <span className="font-mono text-[12px] font-extrabold text-[#ea580c] z-20">Lua</span>
               </div>
 
-              {/* Right Column: Speed/Latency target */}
               <div className="absolute right-6 top-[76px] bg-[#4ade80]/10 border border-[#4ade80]/20 text-[#4ade80] px-2 py-1 rounded text-[11px] font-mono font-bold leading-none z-10">
                 0.4ms
               </div>
             </div>
 
-            {/* Description info */}
             <div>
               <h3 className="text-[17px] font-bold text-white mb-2 font-sans">
                 Sub-millisecond decisions
@@ -262,22 +277,19 @@ export default function FeaturesSection() {
                 Every rate limit check runs inside Redis via an atomic Lua script — race-condition safe, no round trips, no overhead.
               </p>
             </div>
-          </div>
+          </motion.div>
 
-          {/* ── CARD 2: ALGORITHMS ── */}
-          <div className="bg-[#111113]/50 border-b border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300">
-
-            {/* Algorithms visualization panel */}
+          <motion.div
+            variants={cardVariants}
+            className="bg-[#111113]/50 border-b border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
+          >
             <div className="grid grid-cols-2 w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 overflow-hidden relative">
-
-              {/* Center divider line */}
               <div className="absolute top-6 bottom-6 left-1/2 w-px bg-[#27272a]" />
 
-              {/* Left Column: Fixed Window */}
               <div className="flex flex-col justify-between p-4 h-full">
                 <div className="flex items-end justify-center gap-1.5 h-20 mt-4">
                   {[0, 1, 2].map((i) => {
-                    const isActive = i === 1; // Middle block active
+                    const isActive = i === 1;
                     return (
                       <div
                         key={i}
@@ -301,17 +313,13 @@ export default function FeaturesSection() {
                 </span>
               </div>
 
-              {/* Right Column: Sliding Window */}
               <div className="flex flex-col justify-between p-4 h-full overflow-hidden">
                 <div className="relative w-full h-12 border border-[#27272a] bg-[#27272a]/10 rounded mt-8">
-
-                  {/* Sliding window selection block */}
                   <div
                     style={{ animation: "sliding-window 3s infinite linear" }}
                     className="absolute top-0 bottom-0 w-[70px] bg-[#1c0e04] border-l border-r border-[#ea580c] z-10"
                   />
 
-                  {/* Fixed distributed request dots */}
                   <div className="absolute inset-0 flex justify-around items-center px-4">
                     <span className="w-1.5 h-1.5 rounded-full bg-zinc-700" />
                     <span className="w-1.5 h-1.5 rounded-full bg-[#ea580c] z-20" />
@@ -327,7 +335,6 @@ export default function FeaturesSection() {
               </div>
             </div>
 
-            {/* Description info */}
             <div>
               <h3 className="text-[17px] font-bold text-white mb-2 font-sans">
                 Fixed & Sliding Window
@@ -336,29 +343,26 @@ export default function FeaturesSection() {
                 Choose the algorithm that fits your use case. Fixed Window for simplicity, Sliding Window for precision traffic control.
               </p>
             </div>
-          </div>
+          </motion.div>
 
-          {/* ── CARD 3: DROP-IN SDK ── */}
-          <div className="bg-[#111113]/50 border-b md:border-b-0 md:border-r border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300">
-
-            {/* SDK Code typewriter editor */}
+          <motion.div
+            variants={cardVariants}
+            className="bg-[#111113]/50 border-b md:border-b-0 md:border-r border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
+          >
             <div className="w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 p-6 font-mono text-[12px] leading-relaxed relative flex flex-col justify-center select-none overflow-hidden">
               <div className="space-y-1.5">
-                {/* Line 1 */}
                 <div className="relative min-h-[18px] flex items-center">
                   {renderLine1(typedLines[0].length)}
                   {currentLineIndex === 0 && (
                     <span className="w-[6px] h-[14px] bg-[#ea580c] animate-pulse ml-0.5" />
                   )}
                 </div>
-                {/* Line 2 */}
                 <div className="relative min-h-[18px] flex items-center">
                   {renderLine2(typedLines[1].length)}
                   {currentLineIndex === 1 && (
                     <span className="w-[6px] h-[14px] bg-[#ea580c] animate-pulse ml-0.5" />
                   )}
                 </div>
-                {/* Line 3 */}
                 <div className="relative min-h-[18px] flex items-center">
                   {renderLine3(typedLines[2].length)}
                   {currentLineIndex === 2 && (
@@ -368,7 +372,6 @@ export default function FeaturesSection() {
               </div>
             </div>
 
-            {/* Description info */}
             <div>
               <h3 className="text-[17px] font-bold text-white mb-2 font-sans">
                 One import. Instant protection.
@@ -377,15 +380,13 @@ export default function FeaturesSection() {
                 Install @throttlr/sdk, pass your API key, call throttlr.check(). Your endpoint is protected in under a minute.
               </p>
             </div>
-          </div>
+          </motion.div>
 
-          {/* ── CARD 4: REAL-TIME ANALYTICS ── */}
-          <div className="bg-[#111113]/50 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300">
-
-            {/* Real-time bar chart preview */}
+          <motion.div
+            variants={cardVariants}
+            className="bg-[#111113]/50 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
+          >
             <div className="w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 p-6 flex flex-col justify-between">
-
-              {/* Graph bars container */}
               <div className="flex-1 flex items-end justify-between gap-[5px] h-[110px] px-1 pb-1">
                 {bars.map((bar, index) => (
                   <div
@@ -397,7 +398,6 @@ export default function FeaturesSection() {
                 ))}
               </div>
 
-              {/* Statistics row */}
               <div className="flex justify-between items-center border-t border-zinc-900/60 pt-4 font-mono text-[11px] text-[#52525b] select-none leading-none">
                 <span>2.4B requests logged</span>
                 <span>·</span>
@@ -405,7 +405,6 @@ export default function FeaturesSection() {
               </div>
             </div>
 
-            {/* Description info */}
             <div>
               <h3 className="text-[17px] font-bold text-white mb-2 font-sans">
                 Every request. Logged.
@@ -414,10 +413,8 @@ export default function FeaturesSection() {
                 Throttlr asynchronously logs every check to PostgreSQL — identifier, rule, allowed status, count. Charts included in your dashboard.
               </p>
             </div>
-          </div>
-
-        </div>
-
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

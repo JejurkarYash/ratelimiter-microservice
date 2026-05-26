@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // ── TYPES & INTERFACES ──
 interface Token {
@@ -462,17 +463,22 @@ export default function HowItWorksSection() {
 
   return (
     <section className="w-full bg-[#0d0d0f] pt-16 pb-20 border-b border-zinc-900 select-none overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="max-w-[1440px] mx-auto px-6 relative flex flex-col gap-10"
+      >
 
-      {/* CSS Keyframes for Fade Transition on Card */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @keyframes stepFadeIn {
-          from { opacity: 0; transform: translateY(4px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}} />
-
-      <div className="max-w-[1440px] mx-auto px-6 relative flex flex-col gap-10">
+        {/* CSS Keyframes for Fade Transition on Card */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          @keyframes stepFadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `}} />
 
         {/* Decorative Grid Lines aligning with Navbar, Hero, Live Demo & Features */}
         <div className="absolute left-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
@@ -481,7 +487,7 @@ export default function HowItWorksSection() {
         {/* Section Header */}
         <div className="text-center flex flex-col items-center pb-8 z-10">
           <h2
-            className="text-3xl sm:text-4xl md:text-4xl font-semibold text-white leading-tight"
+            className="text-3xl sm:text-4xl md:text-4xl font-semibold text-white leading-tight font-sans"
             style={{ letterSpacing: '-0.04em' }}
           >
             From request to decision.
@@ -544,41 +550,45 @@ export default function HowItWorksSection() {
         </div>
 
         {/* ── PART 2: MAIN CONTENT CARD ── */}
-        <div className="mx-6 md:mx-10 z-10 bg-[#111113] border border-[#27272a] rounded-xl overflow-hidden shadow-2xl min-h-[360px] lg:min-h-[280px]">
-
-          <div
-            key={activeStep}
-            className="grid grid-cols-1 lg:grid-cols-2 animate-[stepFadeIn_0.3s_ease-out] w-full h-full"
-          >
-            {/* Left Column: Visual Asset */}
-            <div className="p-8 lg:p-12 flex items-center justify-center bg-[#0d0d0f]/20 border-b lg:border-b-0 lg:border-r border-[#27272a]">
-              <StepVisualComponent />
-            </div>
-
-            {/* Right Column: Step Explanation */}
-            <div className="p-8 lg:p-12 flex flex-col justify-between gap-8">
-              <div className="space-y-4">
-                <span className="font-mono text-[11px] text-[#3f3f46] tracking-wider block">
-                  {currentStep.num}
-                </span>
-                <h3 className="text-xl lg:text-2xl font-semibold text-white tracking-tight leading-tight">
-                  {currentStep.title}
-                </h3>
-                <p className="text-[14px] text-[#71717a] leading-relaxed max-w-md">
-                  {currentStep.desc}
-                </p>
+        <div className="mx-6 md:mx-10 z-10 bg-[#111113] border border-[#27272a] rounded-xl overflow-hidden shadow-2xl min-h-[360px] lg:min-h-[280px] relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeStep}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="grid grid-cols-1 lg:grid-cols-2 w-full h-full"
+            >
+              {/* Left Column: Visual Asset */}
+              <div className="p-8 lg:p-12 flex items-center justify-center bg-[#0d0d0f]/20 border-b lg:border-b-0 lg:border-r border-[#27272a]">
+                <StepVisualComponent />
               </div>
 
-              {/* Technical Detail Footer */}
-              <div className="font-mono text-[12px] text-[#52525b] pt-4 border-t border-zinc-900/60 flex items-center gap-2">
-                {currentStep.detail}
-              </div>
-            </div>
-          </div>
+              {/* Right Column: Step Explanation */}
+              <div className="p-8 lg:p-12 flex flex-col justify-between gap-8">
+                <div className="space-y-4">
+                  <span className="font-mono text-[11px] text-[#3f3f46] tracking-wider block">
+                    {currentStep.num}
+                  </span>
+                  <h3 className="text-xl lg:text-2xl font-semibold text-white tracking-tight leading-tight">
+                    {currentStep.title}
+                  </h3>
+                  <p className="text-[14px] text-[#71717a] leading-relaxed max-w-md">
+                    {currentStep.desc}
+                  </p>
+                </div>
 
+                {/* Technical Detail Footer */}
+                <div className="font-mono text-[12px] text-[#52525b] pt-4 border-t border-zinc-900/60 flex items-center gap-2">
+                  {currentStep.detail}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-      </div>
+      </motion.div>
     </section>
   );
 }

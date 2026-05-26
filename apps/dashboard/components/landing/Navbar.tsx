@@ -10,16 +10,11 @@ export default function Navbar() {
 
   return (
     <header className="w-full border-b border-zinc-800 bg-[#09090b] sticky top-0 z-50">
-      {/* Central content container aligning with the grid lines */}
       <div className="max-w-[1440px] mx-auto w-full flex items-center justify-between h-20 px-6 relative">
-        {/* Left vertical border line */}
         <div className="absolute left-6 top-0 bottom-0 w-px bg-zinc-800 pointer-events-none" />
-
-        {/* Right vertical border line */}
         <div className="absolute right-6 top-0 bottom-0 w-px bg-zinc-800 pointer-events-none" />
 
-        {/* Logo Section (padded exactly 5px to the right of the left vertical grid line) */}
-        <div className="flex items-center pl-[5px] ml-4 ">
+        <div className="flex items-center pl-[5px] ml-4">
           <Link href="/" className="hover:opacity-90 transition-opacity flex items-center">
             <Image
               src="/logo.svg"
@@ -32,8 +27,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Nav Links & Call-to-Action Section (padded exactly 5px to the left of the right vertical grid line) */}
-        <div className="flex items-center gap-8 pr-[5px] mr-4 ">
+        <div className="flex items-center gap-8 pr-[5px] mr-4">
           <Link
             href={process.env.NEXT_PUBLIC_DOCS_URL || "http://localhost:3002"}
             target="_blank"
@@ -44,11 +38,9 @@ export default function Navbar() {
           </Link>
           <Link
             href={buttonHref}
-            className="group relative inline-flex items-center justify-center border border-[#F97316] px-6 py-2 text-[14px] font-bold text-black font-mono overflow-hidden transition-colors duration-300 hover:border-white active:scale-[0.98] rounded-none hover:cursor-pointer "
+            className="group relative isolate inline-flex items-center justify-center border border-[#F97316] px-6 py-2 text-[14px] font-bold text-black font-mono overflow-hidden transition-colors duration-300 hover:border-white active:scale-[0.98] rounded-none hover:cursor-pointer"
           >
-            {/* Default solid orange background layer */}
             <span className="absolute inset-0 bg-[#F97316] -z-20"></span>
-            {/* Sliding white hover background layer */}
             <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out origin-left -z-10"></span>
             <span className="relative z-10">{buttonText}</span>
           </Link>

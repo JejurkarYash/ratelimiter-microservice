@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 type TabType = "normal" | "limited" | "burst";
 
@@ -39,8 +40,14 @@ export default function LiveDemoSection() {
   }[visibleTab];
 
   return (
-    <section className="w-full bg-[#0d0d0f] py-20 border-b border-zinc-900 select-none ">
-      <div className="max-w-[1440px] mx-auto px-6 relative flex flex-col gap-10 ">
+    <section className="w-full bg-[#0d0d0f] py-20 border-b border-zinc-900 select-none">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="max-w-[1440px] mx-auto px-6 relative flex flex-col gap-10"
+      >
 
         {/* Decorative Grid Lines aligning with Navbar & Hero */}
         <div className="absolute left-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
@@ -259,7 +266,7 @@ export default function LiveDemoSection() {
           </div>
         </div>
 
-      </div>
+      </motion.div>
     </section>
   );
 }
