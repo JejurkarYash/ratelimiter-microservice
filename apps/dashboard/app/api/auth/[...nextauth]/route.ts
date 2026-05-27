@@ -39,7 +39,6 @@ export const authOptions: NextAuthOptions = {
         },
         async session({ session, token }) {
             if (token && token.backendToken) {
-                console.log("token: ", token.backendToken);
                 (session as any).backendToken = token.backendToken;
             }
             return session;
