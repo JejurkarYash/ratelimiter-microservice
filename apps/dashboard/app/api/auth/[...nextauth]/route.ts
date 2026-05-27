@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import GoogeleProvider from "next-auth/providers/google"
-import axiosClient from "@/services/axios";
+import axios from "axios";
 import { NextAuthOptions } from "next-auth"
 
 export const authOptions: NextAuthOptions = {
@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
                 token.accessToken = account.access_token
 
                 try {
-                    const response = await axiosClient.post("/auth/google-login", {
+                    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/google-login`, {
                         name: user.name || 'Google User',
                         email: user.email,
                         password: account.providerAccountId,
