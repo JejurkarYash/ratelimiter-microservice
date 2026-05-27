@@ -26,6 +26,7 @@ export const authOptions: NextAuthOptions = {
                         email: user.email,
                         password: account.providerAccountId,
                     })
+                    console.log("response: ", response.data)
                     if (response.data.token) {
                         token.backendToken = response.data.token
                     } else {
@@ -39,6 +40,7 @@ export const authOptions: NextAuthOptions = {
         },
         async session({ session, token }) {
             if (token && token.backendToken) {
+                console.log("token: ", token.backendToken);
                 (session as any).backendToken = token.backendToken;
             }
             return session;
