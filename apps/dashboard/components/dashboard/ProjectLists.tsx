@@ -59,8 +59,8 @@ const ProjectLists = () => {
             </div>
 
             {/* ── Toolbar ── */}
-            <div className="flex items-center gap-3">
-                <div className="relative">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="relative w-full sm:w-auto">
                     <Search
                         className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/25"
                         size={12}
@@ -70,7 +70,7 @@ const ProjectLists = () => {
                         placeholder="Search projects..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="bg-[#101012] border border-white/[0.07] h-8 text-[11px] rounded-lg pl-8 pr-3 text-white/80 placeholder-white/25 focus:outline-none focus:border-white/[0.15] focus:ring-1 focus:ring-white/[0.08] transition-all font-mono w-56"
+                        className="bg-[#101012] border border-white/[0.07] h-8 text-[11px] rounded-lg pl-8 pr-3 text-white/80 placeholder-white/25 focus:outline-none focus:border-white/[0.15] focus:ring-1 focus:ring-white/[0.08] transition-all font-mono w-full sm:w-56"
                     />
                 </div>
             </div>

@@ -481,8 +481,8 @@ export default function HowItWorksSection() {
         `}} />
 
         {/* Decorative Grid Lines aligning with Navbar, Hero, Live Demo & Features */}
-        <div className="absolute left-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
-        <div className="absolute right-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px]" />
+        <div className="absolute left-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px] hidden md:block" />
+        <div className="absolute right-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px] hidden md:block" />
 
         {/* Section Header */}
         <div className="text-center flex flex-col items-center pb-8 z-10">

@@ -72,31 +72,31 @@ const SettingsPage = () => {
 
                     {/* Divider section: info rows */}
                     <div className="bg-[#19191a] border border-white/[0.06] rounded-xl divide-y divide-white/[0.05]">
-                        <div className="flex items-center justify-between px-5 py-3.5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3.5 gap-1 sm:gap-0">
                             <div className="flex items-center gap-2.5 text-[11px] font-mono text-white/40">
                                 <Mail size={12} className="text-white/20" /> email
                             </div>
-                            <span className="text-[11px] font-mono text-white/65">{tenant.email}</span>
+                            <span className="text-[11px] font-mono text-white/65 break-all sm:break-normal">{tenant.email}</span>
                         </div>
-                        <div className="flex items-center justify-between px-5 py-3.5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3.5 gap-1 sm:gap-0">
                             <div className="flex items-center gap-2.5 text-[11px] font-mono text-white/40">
                                 <CreditCard size={12} className="text-white/20" /> plan
                             </div>
-                            <span className="px-2 py-0.5 rounded-md bg-emerald-500/[0.07] border border-emerald-500/[0.15] text-emerald-400/70 text-[10px] font-mono capitalize">
+                            <span className="px-2 py-0.5 rounded-md bg-emerald-500/[0.07] border border-emerald-500/[0.15] text-emerald-400/70 text-[10px] font-mono capitalize self-start sm:self-auto">
                                 {tenant.plan}
                             </span>
                         </div>
-                        <div className="flex items-center justify-between px-5 py-3.5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3.5 gap-1 sm:gap-0">
                             <div className="flex items-center gap-2.5 text-[11px] font-mono text-white/40">
                                 <Calendar size={12} className="text-white/20" /> joined
                             </div>
                             <span className="text-[11px] font-mono text-white/40">{formatRelativeTime(tenant.createdAt)}</span>
                         </div>
-                        <div className="flex items-center justify-between px-5 py-3.5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3.5 gap-1 sm:gap-0">
                             <div className="flex items-center gap-2.5 text-[11px] font-mono text-white/40">
                                 <User size={12} className="text-white/20" /> account id
                             </div>
-                            <span className="text-[10px] font-mono text-white/25 select-all">{tenant.id}</span>
+                            <span className="text-[10px] font-mono text-white/25 select-all break-all sm:break-normal">{tenant.id}</span>
                         </div>
                     </div>
 

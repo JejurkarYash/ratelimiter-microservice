@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Workflow } from "lucide-react";
+import { Workflow, Menu } from "lucide-react";
 import UserAvatar from "./UserAvatar";
 
 const TopBar = () => {
@@ -23,6 +23,15 @@ const TopBar = () => {
     <header className="flex items-center justify-between h-[52px] min-h-[52px] px-4 bg-dashboard-primary border-b border-white/10">
       {/* Left section — Branding & Breadcrumb */}
       <div className="flex items-center gap-2 lg:gap-3">
+        {/* Hamburger menu trigger */}
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('toggle-sidebar'))}
+          className="p-1 -ml-1 text-white/70 hover:text-white md:hidden focus:outline-none"
+          aria-label="Toggle Sidebar"
+        >
+          <Menu size={20} />
+        </button>
+
         {/* Logo + App Name */}
         <div className="flex items-center gap-2">
           <h1 className="text-lg font-semibold tracking-tight text-white">
@@ -30,42 +39,44 @@ const TopBar = () => {
           </h1>
         </div>
 
-        {/* Divider */}
-        <span className="text-lg font-light text-white/20">/</span>
+        {/* Divider - hidden on mobile */}
+        <span className="hidden sm:inline text-lg font-light text-white/20">/</span>
 
-        {/* Context Selector / Workspace */}
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-white/5 transition-colors duration-200 group"
-        >
-          <div className="flex items-center justify-center w-5 h-5 rounded bg-dashboard-card border border-white/10 text-xs font-medium text-white group-hover:border-white/20 transition-colors">
-            Y
-          </div>
-          <span
-            className={`text-sm font-medium transition-colors ${projectName ? "text-white/60 group-hover:text-white" : "text-white/90 group-hover:text-white"}`}
+        {/* Context Selector / Workspace - hidden on mobile */}
+        <div className="hidden sm:flex items-center">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-white/5 transition-colors duration-200 group"
           >
-            Yash&apos;s Workspace
-          </span>
-          {!projectName && (
-            <svg
-              className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            <div className="flex items-center justify-center w-5 h-5 rounded bg-dashboard-card border border-white/10 text-xs font-medium text-white group-hover:border-white/20 transition-colors">
+              Y
+            </div>
+            <span
+              className={`text-sm font-medium transition-colors ${projectName ? "text-white/60 group-hover:text-white" : "text-white/90 group-hover:text-white"}`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-              />
-            </svg>
-          )}
-        </Link>
+              Yash&apos;s Workspace
+            </span>
+            {!projectName && (
+              <svg
+                className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                />
+              </svg>
+            )}
+          </Link>
+        </div>
 
-        {/* Dynamic Project Breadcrumb */}
+        {/* Dynamic Project Breadcrumb - hidden on mobile */}
         {projectName && (
-          <>
+          <div className="hidden sm:flex items-center gap-2 lg:gap-3">
             <span className="text-lg font-light text-white/20">/</span>
             <div className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-white/5 transition-colors duration-200 group hover:cursor-pointer">
               <span className="text-white/60">
@@ -75,7 +86,7 @@ const TopBar = () => {
                 {projectName}
               </span>
             </div>
-          </>
+          </div>
         )}
       </div>
 

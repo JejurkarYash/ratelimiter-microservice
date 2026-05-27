@@ -253,8 +253,8 @@ export default function AnalyticsShowcaseSection() {
         `}} />
 
         {/* Decorative Grid Lines aligning with Navbar, Hero, Live Demo, Features & How It Works */}
-        <div className="absolute left-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
-        <div className="absolute right-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px]" />
+        <div className="absolute left-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px] hidden md:block" />
+        <div className="absolute right-[9px] -top-16 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px] hidden md:block" />
 
         {/* Section Header */}
         <div className="text-center flex flex-col items-center pb-8 z-10">
@@ -270,7 +270,7 @@ export default function AnalyticsShowcaseSection() {
         </div>
 
         {/* ── DASHBOARD MOCKUP WRAPPER CARD ── */}
-        <div className="mx-6 md:mx-10 z-10 bg-[#111113] border border-[#27272a] rounded-xl overflow-hidden shadow-2xl flex flex-col">
+        <div className="mx-0 sm:mx-6 md:mx-10 z-10 bg-[#111113] border border-[#27272a] rounded-xl overflow-hidden shadow-2xl flex flex-col">
 
           {/* Dashboard Header/Top Bar */}
           <div className="flex items-center justify-between bg-[#18181b] border-b border-[#27272a] h-11 px-5 select-none shrink-0">
@@ -296,48 +296,48 @@ export default function AnalyticsShowcaseSection() {
           </div>
 
           {/* Inner Dashboard Body layout */}
-          <div className="p-6 bg-[#111113] flex flex-col gap-6 w-full">
+          <div className="p-4 sm:p-6 bg-[#111113] flex flex-col gap-6 w-full">
 
             {/* ── ROW 1: STATS GRID ── */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full">
 
               {/* Card 1: Total Requests */}
-              <div className="bg-[#19191a]/80 border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
-                <span className="text-[11px] text-white/30 font-mono uppercase tracking-wider">Total Requests</span>
-                <div className="flex items-baseline justify-between mt-2">
-                  <span className="text-xl font-bold text-white/90 font-mono">
+              <div className="bg-[#19191a]/80 border border-white/[0.06] rounded-xl p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden group">
+                <span className="text-[9.5px] sm:text-[11px] text-white/30 font-mono uppercase tracking-wider">Total Requests</span>
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mt-2 gap-1 sm:gap-0">
+                  <span className="text-[15px] sm:text-xl font-bold text-white/90 font-mono">
                     {totalRequests.toLocaleString()}
                   </span>
-                  <span className="text-[10px] font-mono font-bold text-[#4ade80]">+12% this week</span>
+                  <span className="text-[8.5px] sm:text-[10px] font-mono font-bold text-[#4ade80]">+12%</span>
                 </div>
               </div>
 
               {/* Card 2: Avg Latency */}
-              <div className="bg-[#19191a]/80 border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
-                <span className="text-[11px] text-white/30 font-mono uppercase tracking-wider">Avg Latency</span>
-                <div className="flex items-baseline justify-between mt-2">
-                  <span className="text-xl font-bold text-white/90 font-mono">&lt;1ms</span>
-                  <span className="text-[10px] font-mono text-zinc-500">p99: 0.8ms</span>
+              <div className="bg-[#19191a]/80 border border-white/[0.06] rounded-xl p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden group">
+                <span className="text-[9.5px] sm:text-[11px] text-white/30 font-mono uppercase tracking-wider">Avg Latency</span>
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mt-2 gap-1 sm:gap-0">
+                  <span className="text-[15px] sm:text-xl font-bold text-white/90 font-mono">&lt;1ms</span>
+                  <span className="text-[8.5px] sm:text-[10px] font-mono text-zinc-500">p99: 0.8ms</span>
                 </div>
               </div>
 
               {/* Card 3: Requests Blocked */}
-              <div className="bg-[#19191a]/80 border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
-                <span className="text-[11px] text-white/30 font-mono uppercase tracking-wider">Blocked Today</span>
-                <div className="flex items-baseline justify-between mt-2">
-                  <span className="text-xl font-bold text-white/90 font-mono">
+              <div className="bg-[#19191a]/80 border border-white/[0.06] rounded-xl p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden group">
+                <span className="text-[9.5px] sm:text-[11px] text-white/30 font-mono uppercase tracking-wider">Blocked Today</span>
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mt-2 gap-1 sm:gap-0">
+                  <span className="text-[15px] sm:text-xl font-bold text-white/90 font-mono">
                     {blockedRequests.toLocaleString()}
                   </span>
-                  <span className="text-[10px] font-mono font-bold text-[#f87171]">7.2% block rate</span>
+                  <span className="text-[8.5px] sm:text-[10px] font-mono font-bold text-[#f87171]">7.2%</span>
                 </div>
               </div>
 
               {/* Card 4: Active Rules */}
-              <div className="bg-[#19191a]/80 border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between relative overflow-hidden group">
-                <span className="text-[11px] text-white/30 font-mono uppercase tracking-wider">Active Rules</span>
-                <div className="flex items-baseline justify-between mt-2">
-                  <span className="text-xl font-bold text-white/90 font-mono">4.1K</span>
-                  <span className="text-[10px] font-mono font-bold text-[#4ade80]">+8% tenants</span>
+              <div className="bg-[#19191a]/80 border border-white/[0.06] rounded-xl p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden group">
+                <span className="text-[9.5px] sm:text-[11px] text-white/30 font-mono uppercase tracking-wider">Active Rules</span>
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mt-2 gap-1 sm:gap-0">
+                  <span className="text-[15px] sm:text-xl font-bold text-white/90 font-mono">4.1K</span>
+                  <span className="text-[8.5px] sm:text-[10px] font-mono font-bold text-[#4ade80]">+8%</span>
                 </div>
               </div>
 

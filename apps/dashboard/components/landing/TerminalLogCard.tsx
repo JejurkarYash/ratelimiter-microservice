@@ -105,7 +105,7 @@ export default function TerminalLogCard() {
             {logs.map((log, index) => (
               <div
                 key={index}
-                className="grid grid-cols-[20px_130px_90px_140px_1fr] gap-4 font-mono text-[13px] items-center py-1.5 px-3 hover:bg-white/[0.02] border border-transparent hover:border-zinc-850 rounded-lg transition-all duration-150 -mx-3"
+                className="grid grid-cols-[20px_1fr_90px] sm:grid-cols-[20px_130px_90px_140px_1fr] gap-4 font-mono text-[13px] items-center py-1.5 px-3 hover:bg-white/[0.02] border border-transparent hover:border-zinc-850 rounded-lg transition-all duration-150 -mx-3"
               >
                 {/* 1. Status icon badge */}
                 <div className="flex items-center">
@@ -125,7 +125,7 @@ export default function TerminalLogCard() {
                 </div>
 
                 {/* 2. Identifier with user/key icon */}
-                <div className="flex items-center text-zinc-300 font-medium">
+                <div className="flex items-center text-zinc-300 font-medium min-w-0">
                   <svg className="w-3 h-3 text-zinc-600 mr-1.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                   </svg>
@@ -143,14 +143,14 @@ export default function TerminalLogCard() {
                 </div>
 
                 {/* 4. Remaining label */}
-                <div className="flex items-center text-zinc-500">
+                <div className="hidden sm:flex items-center text-zinc-500">
                   <span className={`text-[12px] ${log.ok ? "text-zinc-500" : "text-rose-500/30"}`}>
                     {log.rem}
                   </span>
                 </div>
 
                 {/* 5. Latency styled with a clock icon */}
-                <div className="flex items-center justify-end text-zinc-500 font-mono text-xs">
+                <div className="hidden sm:flex items-center justify-end text-zinc-500 font-mono text-xs">
                   <svg className="w-3 h-3 text-zinc-700 mr-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>

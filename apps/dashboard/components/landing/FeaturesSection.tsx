@@ -183,13 +183,13 @@ export default function FeaturesSection() {
       <style dangerouslySetInnerHTML={{
         __html: `
         @keyframes req-flow {
-          0% { left: 24px; opacity: 0; }
+          0% { left: 16px; opacity: 0; }
           10% { opacity: 1; }
           45% { left: 50%; transform: translateX(-50%); opacity: 1; }
           50% { left: 50%; transform: translateX(-50%); opacity: 0.1; }
           55% { left: 50%; transform: translateX(-50%); opacity: 1; }
-          90% { left: calc(100% - 70px); opacity: 1; }
-          100% { left: calc(100% - 70px); opacity: 0; }
+          90% { left: calc(100% - 56px); opacity: 1; }
+          100% { left: calc(100% - 56px); opacity: 0; }
         }
         @keyframes redis-pulse {
           0%, 100% { transform: scale(1); filter: brightness(1); }
@@ -202,8 +202,8 @@ export default function FeaturesSection() {
       `}} />
 
       <div className="max-w-[1440px] mx-auto px-6 relative">
-        <div className="absolute left-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
-        <div className="absolute right-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px]" />
+        <div className="absolute left-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px] hidden md:block" />
+        <div className="absolute right-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px] hidden md:block" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -237,7 +237,7 @@ export default function FeaturesSection() {
         >
           <motion.div
             variants={cardVariants}
-            className="bg-[#111113]/50 border-b md:border-r border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
+            className="bg-[#111113]/50 border-b md:border-r border-zinc-800 rounded-none py-16 px-4 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
           >
             <div className="relative w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 overflow-hidden flex items-center justify-center">
               <div className="absolute left-10 right-10 top-[90px] border-t-2 border-dashed border-[#27272a] -z-10" />
@@ -250,21 +250,21 @@ export default function FeaturesSection() {
                 req
               </span>
 
-              <div className="absolute left-6 top-[76px] bg-zinc-900 border border-zinc-800 text-zinc-500 px-2 py-1 rounded text-[11px] font-mono leading-none z-10">
+              <div className="absolute left-3 sm:left-6 top-[76px] bg-zinc-900 border border-zinc-800 text-zinc-500 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded text-[10px] sm:text-[11px] font-mono leading-none z-10">
                 client
               </div>
 
               <div
                 style={{ animation: "redis-pulse 2s infinite ease-in-out" }}
-                className="absolute left-1/2 top-[60px] -translate-x-1/2 w-[60px] h-[60px] flex items-center justify-center z-10 cursor-default"
+                className="absolute left-1/2 top-[65px] -translate-x-1/2 w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] flex items-center justify-center z-10 cursor-default"
               >
                 <svg className="absolute inset-0 w-full h-full text-[#ea580c]/10 fill-current stroke-[#ea580c] stroke-2" viewBox="0 0 100 100">
                   <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
                 </svg>
-                <span className="font-mono text-[12px] font-extrabold text-[#ea580c] z-20">Lua</span>
+                <span className="font-mono text-[10px] sm:text-[12px] font-extrabold text-[#ea580c] z-20">Lua</span>
               </div>
 
-              <div className="absolute right-6 top-[76px] bg-[#4ade80]/10 border border-[#4ade80]/20 text-[#4ade80] px-2 py-1 rounded text-[11px] font-mono font-bold leading-none z-10">
+              <div className="absolute right-3 sm:right-6 top-[76px] bg-[#4ade80]/10 border border-[#4ade80]/20 text-[#4ade80] px-1.5 py-0.5 sm:px-2 sm:py-1 rounded text-[10px] sm:text-[11px] font-mono font-bold leading-none z-10">
                 0.4ms
               </div>
             </div>
@@ -281,19 +281,17 @@ export default function FeaturesSection() {
 
           <motion.div
             variants={cardVariants}
-            className="bg-[#111113]/50 border-b border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
+            className="bg-[#111113]/50 border-b border-zinc-800 rounded-none py-16 px-4 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
           >
-            <div className="grid grid-cols-2 w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 overflow-hidden relative">
-              <div className="absolute top-6 bottom-6 left-1/2 w-px bg-[#27272a]" />
-
-              <div className="flex flex-col justify-between p-4 h-full">
-                <div className="flex items-end justify-center gap-1.5 h-20 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 w-full h-auto sm:h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 overflow-hidden relative divide-y sm:divide-y-0 sm:divide-x divide-zinc-900/80">
+              <div className="flex flex-col justify-between p-4 h-[120px] sm:h-full">
+                <div className="flex items-end justify-center gap-1.5 h-16 sm:h-20 mt-2 sm:mt-4">
                   {[0, 1, 2].map((i) => {
                     const isActive = i === 1;
                     return (
                       <div
                         key={i}
-                        className={`w-12 h-10 border rounded flex flex-wrap items-center justify-center p-1 transition-all ${isActive
+                        className={`w-10 h-8 sm:w-12 sm:h-10 border rounded flex flex-wrap items-center justify-center p-1 transition-all ${isActive
                           ? "bg-[#1c0e04] border-[#7c2d12]"
                           : "bg-[#27272a]/20 border-[#27272a]"
                           }`}
@@ -301,23 +299,23 @@ export default function FeaturesSection() {
                         {isActive && Array.from({ length: fixedRequestCount }).map((_, dotIndex) => (
                           <span
                             key={dotIndex}
-                            className="w-1.5 h-1.5 rounded-full bg-[#ea580c] animate-scale-in m-0.5"
+                            className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#ea580c] animate-scale-in m-0.5"
                           />
                         ))}
                       </div>
                     );
                   })}
                 </div>
-                <span className="text-[10px] font-mono text-[#52525b] font-bold tracking-wider text-center select-none">
+                <span className="text-[10px] font-mono text-[#52525b] font-bold tracking-wider text-center select-none mt-2">
                   FIXED_WINDOW
                 </span>
               </div>
 
-              <div className="flex flex-col justify-between p-4 h-full overflow-hidden">
-                <div className="relative w-full h-12 border border-[#27272a] bg-[#27272a]/10 rounded mt-8">
+              <div className="flex flex-col justify-between p-4 h-[120px] sm:h-full overflow-hidden">
+                <div className="relative w-full h-10 sm:h-12 border border-[#27272a] bg-[#27272a]/10 rounded mt-5 sm:mt-8">
                   <div
                     style={{ animation: "sliding-window 3s infinite linear" }}
-                    className="absolute top-0 bottom-0 w-[70px] bg-[#1c0e04] border-l border-r border-[#ea580c] z-10"
+                    className="absolute top-0 bottom-0 w-[50px] sm:w-[70px] bg-[#1c0e04] border-l border-r border-[#ea580c] z-10"
                   />
 
                   <div className="absolute inset-0 flex justify-around items-center px-4">
@@ -347,9 +345,9 @@ export default function FeaturesSection() {
 
           <motion.div
             variants={cardVariants}
-            className="bg-[#111113]/50 border-b md:border-b-0 md:border-r border-zinc-800 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
+            className="bg-[#111113]/50 border-b md:border-b-0 md:border-r border-zinc-800 rounded-none py-16 px-4 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
           >
-            <div className="w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 p-6 font-mono text-[12px] leading-relaxed relative flex flex-col justify-center select-none overflow-hidden">
+            <div className="w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 p-4 sm:p-6 font-mono text-[11px] sm:text-[12px] leading-relaxed relative flex flex-col justify-center select-none overflow-x-auto whitespace-nowrap scrollbar-none">
               <div className="space-y-1.5">
                 <div className="relative min-h-[18px] flex items-center">
                   {renderLine1(typedLines[0].length)}
@@ -384,10 +382,10 @@ export default function FeaturesSection() {
 
           <motion.div
             variants={cardVariants}
-            className="bg-[#111113]/50 rounded-none py-16 px-8 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
+            className="bg-[#111113]/50 rounded-none py-16 px-4 sm:py-20 sm:px-12 md:py-24 md:px-16 flex flex-col justify-between gap-10 hover:bg-[#141416]/80 transition-colors duration-300"
           >
-            <div className="w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 p-6 flex flex-col justify-between">
-              <div className="flex-1 flex items-end justify-between gap-[5px] h-[110px] px-1 pb-1">
+            <div className="w-full h-[180px] bg-[#0d0d0f] rounded-lg border border-zinc-900/60 p-4 sm:p-6 flex flex-col justify-between">
+              <div className="flex-1 flex items-end justify-between gap-[3px] sm:gap-[5px] h-[110px] px-1 pb-1">
                 {bars.map((bar, index) => (
                   <div
                     key={index}
@@ -398,10 +396,10 @@ export default function FeaturesSection() {
                 ))}
               </div>
 
-              <div className="flex justify-between items-center border-t border-zinc-900/60 pt-4 font-mono text-[11px] text-[#52525b] select-none leading-none">
-                <span>2.4B requests logged</span>
+              <div className="flex justify-between items-center border-t border-zinc-900/60 pt-4 font-mono text-[10px] sm:text-[11px] text-[#52525b] select-none leading-none gap-2">
+                <span className="truncate">2.4B requests logged</span>
                 <span>·</span>
-                <span className="text-[#f87171] font-semibold">18.2M blocked</span>
+                <span className="text-[#f87171] font-semibold truncate">18.2M blocked</span>
               </div>
             </div>
 

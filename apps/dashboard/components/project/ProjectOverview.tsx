@@ -72,7 +72,7 @@ const ProjectOverview = () => {
         {/* Top edge accent */}
         <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Left: name + masked key */}
           <div className="flex flex-col gap-1.5">
             <p className="text-[10px] text-white/30 font-mono uppercase tracking-widest">
@@ -83,36 +83,38 @@ const ProjectOverview = () => {
             </h1>
             <div className="flex items-center gap-1.5 mt-0.5">
               <Key size={10} className="text-white/25 shrink-0" />
-              <span className="text-[11px] text-white/30 font-mono tracking-wider">
+              <span className="text-[11px] text-white/30 font-mono tracking-wider truncate max-w-[200px] sm:max-w-none">
                 {project.apiKeyMasked}
               </span>
             </div>
           </div>
 
           {/* Right: active badge */}
-          {project.isActive ? (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-primary/20 bg-primary/5">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
-              </span>
-              <span className="text-[10px] font-medium text-primary/70">
-                Active
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.03]">
-              <div className="h-1.5 w-1.5 rounded-full bg-white/20" />
-              <span className="text-[10px] font-medium text-white/35">
-                Paused
-              </span>
-            </div>
-          )}
+          <div className="self-start sm:self-auto">
+            {project.isActive ? (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-primary/20 bg-primary/5 w-fit">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
+                </span>
+                <span className="text-[10px] font-medium text-primary/70">
+                  Active
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.03] w-fit">
+                <div className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                <span className="text-[10px] font-medium text-white/35">
+                  Paused
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Total Requests */}
         <div className="group relative bg-[#19191a] border border-white/[0.06] hover:border-white/[0.12] rounded-xl p-4 flex flex-col gap-3 overflow-hidden transition-all duration-300">
           <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -193,7 +195,7 @@ const ProjectOverview = () => {
       </div>
 
       {/* ── 2 Columns: Top Blocked & Recent Activity ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Top Blocked Rules */}
         <div className="bg-[#19191a] border border-white/[0.06] rounded-xl p-4 flex flex-col">
           <p className="text-[10px] text-white/30 font-mono uppercase tracking-widest mb-4">
@@ -238,7 +240,7 @@ const ProjectOverview = () => {
                   key={i}
                   className="flex items-center justify-between py-2 border-b border-white/[0.04] last:border-0"
                 >
-                  <span className="text-[12px] text-white/60 font-mono">
+                  <span className="text-[12px] text-white/60 font-mono truncate max-w-[150px] sm:max-w-none">
                     {log.identifier}
                   </span>
                   <span
@@ -259,7 +261,7 @@ const ProjectOverview = () => {
 
       {/* ── Rules List ── */}
       <div className="bg-[#19191a] border border-white/[0.06] rounded-xl overflow-hidden flex flex-col">
-        <div className="px-4 py-3.5 border-b border-white/[0.05] flex items-center justify-between">
+        <div className="px-4 py-3.5 border-b border-white/[0.05] flex items-center justify-between gap-4">
           <div>
             <p className="text-[10px] text-white/30 font-mono uppercase tracking-widest mb-0.5">
               Project
@@ -289,7 +291,7 @@ const ProjectOverview = () => {
             rules.map((rule: any) => (
               <div
                 key={rule.id}
-                className="group relative flex items-center justify-between rounded-xl border border-white/[0.06] bg-[#101012] hover:border-white/[0.12] transition-all duration-300 px-4 py-3 overflow-hidden"
+                className="group relative flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-white/[0.06] bg-[#101012] hover:border-white/[0.12] transition-all duration-300 px-4 py-3 overflow-hidden gap-2 sm:gap-0"
               >
                 <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -304,7 +306,7 @@ const ProjectOverview = () => {
                 </div>
 
                 {/* Pills */}
-                <div className="flex items-center gap-1.5 shrink-0 mx-4">
+                <div className="flex items-center gap-1.5 shrink-0 sm:mx-4">
                   <span className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.07] text-[9.5px] text-white/40 font-mono">
                     {rule.limit} req / {rule.window}s
                   </span>
@@ -312,16 +314,6 @@ const ProjectOverview = () => {
                     {rule.algorithm === "FIXED_WINDOW" ? "Fixed" : "Sliding"}
                   </span>
                 </div>
-
-                {/* Actions */}
-                {/* <div className="flex items-center gap-1 shrink-0">
-                                    <button className="text-white/20 hover:text-white/60 transition-colors p-1 cursor-pointer">
-                                        <Edit2 size={13} />
-                                    </button>
-                                    <button className="text-white/20 hover:text-red-400/70 transition-colors p-1 cursor-pointer">
-                                        <Trash2 size={13} />
-                                    </button>
-                                </div> */}
               </div>
             ))
           )}

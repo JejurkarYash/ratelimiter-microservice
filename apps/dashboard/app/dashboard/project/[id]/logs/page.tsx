@@ -87,18 +87,18 @@ const LogsPage = () => {
             </div>
 
             {/* Toolbar */}
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-                <div className="relative">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full">
+                <div className="relative w-full sm:w-auto">
                     <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/25" size={12} />
                     <input
                         type="text"
                         placeholder="Search by rule name..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="bg-[#101012] border border-white/[0.07] h-8 text-[11px] rounded-lg pl-8 pr-3 text-white/80 placeholder-white/25 focus:outline-none focus:border-white/[0.15] focus:ring-1 focus:ring-white/[0.08] transition-all font-mono w-56"
+                        className="bg-[#101012] border border-white/[0.07] h-8 text-[11px] rounded-lg pl-8 pr-3 text-white/80 placeholder-white/25 focus:outline-none focus:border-white/[0.15] focus:ring-1 focus:ring-white/[0.08] transition-all font-mono w-full sm:w-56"
                     />
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 flex-wrap self-start sm:self-auto">
                     {(["all", "allowed", "blocked"] as const).map((s) => (
                         <button
                             key={s}

@@ -34,8 +34,8 @@ export default function CTASection() {
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         className="max-w-[1440px] mx-auto px-6 relative"
       >
-        <div className="absolute left-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
-        <div className="absolute right-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px]" />
+        <div className="absolute left-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px] hidden md:block" />
+        <div className="absolute right-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px] hidden md:block" />
 
         <div className="max-w-[600px] w-full mx-auto flex flex-col items-center justify-center text-center px-4 relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-950/60 text-[11px] font-medium text-zinc-400 font-mono mb-6 hover:border-zinc-700 transition-colors cursor-default w-fit">
@@ -56,16 +56,16 @@ export default function CTASection() {
             Drop-in SDK middleware. Redis-powered. Deploy in minutes.
           </p>
 
-          <div className="w-full max-w-md z-10 flex justify-center mb-8">
-            <div className="flex items-center justify-between bg-[#111113] border border-[#27272a] rounded-lg py-3.5 px-6 w-full select-text transition-all hover:border-[#ea580c]/50">
-              <span className="font-mono text-[14px] text-zinc-300">
+          <div className="w-full max-w-md z-10 flex justify-center mb-8 font-mono">
+            <div className="flex items-center justify-between bg-[#111113] border border-[#27272a] rounded-lg py-3 sm:py-3.5 px-4 sm:px-6 w-full select-text transition-all hover:border-[#ea580c]/50">
+              <span className="text-[12px] sm:text-[14px] text-zinc-300">
                 <span className="text-[#71717a]">npm install </span>
                 <span className="text-[#ea580c] font-semibold">@throttlr/sdk</span>
               </span>
 
               <button
                 onClick={handleCopy}
-                className="text-[#52525b] hover:text-zinc-300 transition-colors ml-6 cursor-pointer shrink-0"
+                className="text-[#52525b] hover:text-zinc-300 transition-colors ml-4 sm:ml-6 cursor-pointer shrink-0"
                 title="Copy install command"
               >
                 {copied ? (
@@ -104,11 +104,11 @@ export default function CTASection() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto mb-10">
             <Link
               href={status == "authenticated" ? "/dashboard" : "/login"}
-              className="group relative isolate inline-flex items-center justify-center border border-[#F97316] px-8 py-3 text-[15px] font-bold text-black font-mono overflow-hidden transition-colors duration-300 hover:border-white active:scale-[0.98] rounded-none"
+              className="group relative isolate inline-flex items-center justify-center border border-[#F97316] px-8 py-3 text-[15px] font-bold text-black font-mono overflow-hidden transition-colors duration-300 hover:border-white active:scale-[0.98] rounded-none w-full sm:w-auto text-center"
             >
               <span className="absolute inset-0 bg-[#F97316] -z-20"></span>
               <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out origin-left -z-10"></span>
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center justify-center gap-2 w-full">
                 Get started free
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -129,10 +129,10 @@ export default function CTASection() {
               href={process.env.NEXT_PUBLIC_DOC_URL as string}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative isolate inline-flex items-center justify-center border border-white px-8 py-3 text-[15px] font-bold text-white font-mono overflow-hidden transition-colors duration-300 hover:text-black active:scale-[0.98] rounded-none"
+              className="group relative isolate inline-flex items-center justify-center border border-white px-8 py-3 text-[15px] font-bold text-white font-mono overflow-hidden transition-colors duration-300 hover:text-black active:scale-[0.98] rounded-none w-full sm:w-auto text-center"
             >
               <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out origin-left -z-10"></span>
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center justify-center gap-2 w-full">
                 View docs →
               </span>
             </Link>

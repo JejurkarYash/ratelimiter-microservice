@@ -50,14 +50,14 @@ export default function LiveDemoSection() {
       >
 
         {/* Decorative Grid Lines aligning with Navbar & Hero */}
-        <div className="absolute left-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
-        <div className="absolute right-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px]" />
+        <div className="absolute left-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none ml-[15px] hidden md:block" />
+        <div className="absolute right-[9px] -top-20 -bottom-20 w-px bg-zinc-800 pointer-events-none mr-[15px] hidden md:block" />
 
         {/* ── PART 1: INTERACTIVE DEMO PANEL ── */}
-        <div className="mx-6 md:mx-10 z-10 bg-[#111113] border border-[#27272a] rounded-xl overflow-hidden shadow-2xl flex flex-col">
+        <div className="mx-0 sm:mx-6 md:mx-10 z-10 bg-[#111113] border border-[#27272a] rounded-xl overflow-hidden shadow-2xl flex flex-col">
 
           {/* Tab Bar Header */}
-          <div className="flex border-b border-[#27272a] bg-[#141416]/50">
+          <div className="flex overflow-x-auto whitespace-nowrap scrollbar-none flex-nowrap border-b border-[#27272a] bg-[#141416]/50">
             {(["normal", "limited", "burst"] as const).map((tab) => {
               const label = {
                 normal: "Normal traffic",
@@ -221,16 +221,16 @@ export default function LiveDemoSection() {
         </div>
 
         {/* ── PART 2: INSTALL COMMAND BAR ── */}
-        <div className="mx-6 md:mx-10 z-10 flex justify-center mt-4">
-          <div className="flex items-center justify-between bg-[#111113] border border-[#27272a] rounded-lg py-3.5 px-6 w-full max-w-lg select-text transition-all hover:border-[#ea580c]/50">
-            <span className="font-mono text-[14px] text-zinc-300">
+        <div className="mx-0 sm:mx-6 md:mx-10 z-10 flex justify-center mt-4">
+          <div className="flex items-center justify-between bg-[#111113] border border-[#27272a] rounded-lg py-3 sm:py-3.5 px-4 sm:px-6 w-full max-w-lg select-text transition-all hover:border-[#ea580c]/50">
+            <span className="font-mono text-[12px] sm:text-[14px] text-zinc-300">
               <span className="text-[#71717a]">npm install </span>
               <span className="text-[#ea580c] font-semibold">@throttlr/sdk</span>
             </span>
 
             <button
               onClick={handleCopy}
-              className="text-[#52525b] hover:text-zinc-300 transition-colors ml-6 cursor-pointer"
+              className="text-[#52525b] hover:text-zinc-300 transition-colors ml-4 sm:ml-6 cursor-pointer shrink-0"
               title="Copy install command"
             >
               {copied ? (

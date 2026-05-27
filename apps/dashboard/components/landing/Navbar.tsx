@@ -13,11 +13,11 @@ export default function Navbar() {
 
   return (
     <header className="w-full border-b border-zinc-800 bg-[#09090b] sticky top-0 z-50">
-      <div className="max-w-[1440px] mx-auto w-full flex items-center justify-between h-20 px-6 relative">
-        <div className="absolute left-6 top-0 bottom-0 w-px bg-zinc-800 pointer-events-none" />
-        <div className="absolute right-6 top-0 bottom-0 w-px bg-zinc-800 pointer-events-none" />
+      <div className="max-w-[1440px] mx-auto w-full flex items-center justify-between h-20 px-4 md:px-6 relative">
+        <div className="absolute left-6 top-0 bottom-0 w-px bg-zinc-800 pointer-events-none hidden md:block" />
+        <div className="absolute right-6 top-0 bottom-0 w-px bg-zinc-800 pointer-events-none hidden md:block" />
 
-        <div className="flex items-center pl-[5px] ml-4">
+        <div className="flex items-center pl-[5px] ml-0 md:ml-4">
           <Link href="/" className="hover:opacity-90 transition-opacity flex items-center">
             <Image
               src="/logo.svg"
@@ -30,7 +30,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-8 pr-[5px] mr-4">
+        <div className="flex items-center gap-4 md:gap-8 pr-[5px] mr-0 md:mr-4">
           <Link
             href={process.env.NEXT_PUBLIC_DOC_URL as string}
             target="_blank"

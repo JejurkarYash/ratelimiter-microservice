@@ -28,11 +28,11 @@ export default function Hero() {
         }}
       />
 
-      <div className="max-w-[1440px] mx-auto w-full px-6 pt-10 pb-20 lg:pb-32 min-h-full flex flex-col lg:flex-row items-center justify-between gap-12">
-        <div className="absolute left-6 -top-[1px] bottom-0 w-px bg-zinc-800 pointer-events-none ml-[15px]" />
-        <div className="absolute right-6 -top-[1px] bottom-0 w-px bg-zinc-800 pointer-events-none mr-[15px]" />
+      <div className="max-w-[1440px] mx-auto w-full px-4 md:px-6 pt-10 pb-20 lg:pb-32 min-h-full flex flex-col lg:flex-row items-center justify-between gap-12">
+        <div className="absolute left-6 -top-[1px] bottom-0 w-px bg-zinc-800 pointer-events-none ml-[15px] hidden md:block" />
+        <div className="absolute right-6 -top-[1px] bottom-0 w-px bg-zinc-800 pointer-events-none mr-[15px] hidden md:block" />
 
-        <div className="flex-1 z-10 select-none ml-6 pt-0 pb-4 px-4">
+        <div className="flex-1 z-10 select-none ml-0 lg:ml-6 pt-0 pb-4 px-0 sm:px-4">
           <div>
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -99,15 +99,15 @@ export default function Hero() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            className="flex gap-4 mt-8"
+            className="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto"
           >
             <Link
               href="/dashboard"
-              className="group relative isolate inline-flex items-center justify-center border border-[#F97316] px-8 py-3 text-[15px] font-bold text-black font-mono overflow-hidden transition-colors duration-300 hover:border-white active:scale-[0.98] rounded-none"
+              className="group relative isolate inline-flex items-center justify-center border border-[#F97316] px-8 py-3 text-[15px] font-bold text-black font-mono overflow-hidden transition-colors duration-300 hover:border-white active:scale-[0.98] rounded-none w-full sm:w-auto text-center"
             >
               <span className="absolute inset-0 bg-[#F97316] -z-20"></span>
               <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out origin-left -z-10"></span>
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center justify-center gap-2 w-full">
                 Get Started
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -128,10 +128,10 @@ export default function Hero() {
               href="https://github.com/JejurkarYash/ratelimiter-microservice"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative isolate inline-flex items-center justify-center border border-white px-8 py-3 text-[15px] font-bold text-white font-mono overflow-hidden transition-colors duration-300 hover:text-black active:scale-[0.98] rounded-none"
+              className="group relative isolate inline-flex items-center justify-center border border-white px-8 py-3 text-[15px] font-bold text-white font-mono overflow-hidden transition-colors duration-300 hover:text-black active:scale-[0.98] rounded-none w-full sm:w-auto text-center"
             >
               <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out origin-left -z-10"></span>
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center justify-center gap-2 w-full">
                 View on GitHub
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +155,7 @@ export default function Hero() {
           initial={{ opacity: 0, x: 30, scale: 0.98 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full lg:flex-1 max-w-[580px] pr-[5px] mr-6 z-10 flex justify-center lg:justify-end"
+          className="w-full lg:flex-1 max-w-[580px] pr-[5px] mr-0 lg:mr-6 z-10 flex justify-center lg:justify-end"
         >
           <TerminalLogCard />
         </motion.div>
