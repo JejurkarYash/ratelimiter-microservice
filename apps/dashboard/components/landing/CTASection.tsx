@@ -3,9 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 
 export default function CTASection() {
   const [copied, setCopied] = useState(false);
+  const { status } = useSession();
 
   const handleCopy = () => {
     if (typeof navigator !== "undefined") {
@@ -101,7 +103,7 @@ export default function CTASection() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto mb-10">
             <Link
-              href="/login"
+              href={status == "authenticated" ? "/dashboard" : "/login"}
               className="group relative isolate inline-flex items-center justify-center border border-[#F97316] px-8 py-3 text-[15px] font-bold text-black font-mono overflow-hidden transition-colors duration-300 hover:border-white active:scale-[0.98] rounded-none"
             >
               <span className="absolute inset-0 bg-[#F97316] -z-20"></span>
