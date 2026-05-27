@@ -124,7 +124,7 @@ export default function CTASection() {
             </Link>
 
             <Link
-              href={process.env.NEXT_PUBLIC_DOCS_URL || "http://localhost:3002"}
+              href={process.env.NEXT_PUBLIC_DOC_URL as string}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative isolate inline-flex items-center justify-center border border-white px-8 py-3 text-[15px] font-bold text-white font-mono overflow-hidden transition-colors duration-300 hover:text-black active:scale-[0.98] rounded-none"
@@ -154,6 +154,6 @@ export default function CTASection() {
           </div>
         </div>
       </motion.div>
-    </section>
+    </section >
   );
 }

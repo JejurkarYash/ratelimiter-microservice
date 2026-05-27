@@ -8,6 +8,9 @@ export default function Navbar() {
   const buttonText = status === "authenticated" ? "Dashboard" : "Login";
   const buttonHref = status === "authenticated" ? "/dashboard" : "/login";
 
+
+  console.log(process.env.NEXT_PUBLIC_DOC_URL)
+
   return (
     <header className="w-full border-b border-zinc-800 bg-[#09090b] sticky top-0 z-50">
       <div className="max-w-[1440px] mx-auto w-full flex items-center justify-between h-20 px-6 relative">
@@ -29,7 +32,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-8 pr-[5px] mr-4">
           <Link
-            href={process.env.NEXT_PUBLIC_DOCS_URL || "http://localhost:3002"}
+            href={process.env.NEXT_PUBLIC_DOC_URL as string}
             target="_blank"
             rel="noopener noreferrer"
             className="text-[15px] font-medium text-zinc-300 hover:text-white transition-colors font-mono"
