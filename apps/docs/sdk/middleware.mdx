@@ -15,7 +15,7 @@ import { RateLimiter, RateLimitermiddleware } from "@throttlr/sdk";
 
 const limiter = new RateLimiter({
   apiKey: process.env.THROTTLR_API_KEY!,
-  baseUrl: "https://api.throttlr.dev/sdk",
+  baseUrl: "https://repoapi-production-fcf8.up.railway.app/sdk",
 });
 
 const app = express();

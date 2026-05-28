@@ -24,7 +24,7 @@ import { RateLimiter } from "@throttlr/sdk";
 const limiter = new RateLimiter({
   apiKey: "your-throttlr-api-key",
   // Optional: defaults to the production Throttlr API
-  // baseUrl: "https://api.throttlr.dev/sdk" 
+  // baseUrl: "https://repoapi-production-fcf8.up.railway.app/sdk" 
 });
 
 const result = await limiter.check({
