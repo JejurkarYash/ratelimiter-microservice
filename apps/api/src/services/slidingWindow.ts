@@ -1,5 +1,5 @@
-import redisClient from "../lib/redis";
-import { slidingWindowScript } from "./scripts/index";
+import redisClient from "../lib/redis.js";
+import { slidingWindowScript } from "./scripts/index.js";
 
 interface slidingWindowResult {
   allowed: boolean;

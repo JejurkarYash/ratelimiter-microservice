@@ -5,7 +5,7 @@ import {
   updateRule,
   getRules,
   getRuleFromId,
-} from "../controllers/ruleControllers";
+} from "../controllers/ruleControllers.js";
 
 const router: Router = Router();
 

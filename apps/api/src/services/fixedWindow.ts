@@ -1,6 +1,6 @@
-import { redisClient } from "../lib/redis";
-import { getWindowStart } from "./utils/getWindowStart";
-import { fixedWindowScript } from "./scripts/index";
+import { redisClient } from "../lib/redis.js";
+import { getWindowStart } from "./utils/getWindowStart.js";
+import { fixedWindowScript } from "./scripts/index.js";
 
 interface FixedWindowResult {
   allowed: boolean;

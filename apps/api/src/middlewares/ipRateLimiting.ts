@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import redisClient from "../lib/redis";
+import redisClient from "../lib/redis.js";
 import logger from "../lib/logger.js";
 
 export async function ipRateLimiting(

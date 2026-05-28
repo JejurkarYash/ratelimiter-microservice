@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { hashApiKey } from "../utils/hashApiKey";
+import { hashApiKey } from "../utils/hashApiKey.js";
 import { prisma } from "@repo/db";
 import logger from "../lib/logger.js";
 

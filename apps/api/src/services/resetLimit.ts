@@ -1,5 +1,5 @@
-import { getWindowStart } from "./utils/getWindowStart";
-import redisClient from "../lib/redis";
+import { getWindowStart } from "./utils/getWindowStart.js";
+import redisClient from "../lib/redis.js";
 
 export async function resetLimitFunction(
   tenantId: string,

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sdkCheck } from "../controllers/sdkControllers";
+import { sdkCheck } from "../controllers/sdkControllers.js";
 
 const router: Router = Router();
 
