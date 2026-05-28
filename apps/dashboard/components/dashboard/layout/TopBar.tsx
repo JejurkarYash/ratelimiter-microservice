@@ -3,10 +3,13 @@ import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Workflow, Menu } from "lucide-react";
 import UserAvatar from "./UserAvatar";
+import { useSession } from "next-auth/react";
 
 const TopBar = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
+  const firstName = session?.user?.name?.split(" ")[0] || "User";
 
   const segments = pathname?.split("/").filter(Boolean) || [];
   const isProjectRoute =
@@ -49,12 +52,12 @@ const TopBar = () => {
             className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-white/5 transition-colors duration-200 group"
           >
             <div className="flex items-center justify-center w-5 h-5 rounded bg-dashboard-card border border-white/10 text-xs font-medium text-white group-hover:border-white/20 transition-colors">
-              Y
+              {firstName?.charAt(0)}
             </div>
             <span
               className={`text-sm font-medium transition-colors ${projectName ? "text-white/60 group-hover:text-white" : "text-white/90 group-hover:text-white"}`}
             >
-              Yash&apos;s Workspace
+              {firstName}&apos;s Workspace
             </span>
             {!projectName && (
               <svg
