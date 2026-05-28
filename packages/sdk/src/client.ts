@@ -1,6 +1,6 @@
 import { RateLimiterConfig, CheckParams, CheckResult } from "./types";
 import { RateLimiterError } from "./error";
-const DEFAULT_BASE_URL = "http://localhost:3001/sdk";
+const DEFAULT_BASE_URL = "https://repoapi-production-fcf8.up.railway.app/sdk";
 
 export class RateLimiter {
   private apiKey: string;

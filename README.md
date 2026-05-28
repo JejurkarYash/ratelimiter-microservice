@@ -62,7 +62,7 @@ const app = express();
 // 1. Initialize the rate limiter client
 const limiter = new RateLimiter({
   apiKey: "your_throttlr_api_key_here",
-  baseUrl: "http://localhost:3001/sdk" // Defaults to production API
+  baseUrl: "https://repoapi-production-fcf8.up.railway.app/sdk" // Defaults to production API
 });
 
 // 2. Protect route with middleware
