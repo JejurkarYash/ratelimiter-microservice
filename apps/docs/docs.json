@@ -94,7 +94,7 @@
         },
         {
           "anchor": "Dashboard",
-          "href": "https://ratelimiter-microservice-dashboard.vercel.app/",
+          "href": "https://throttlr.yashjejurkar.me/",
           "icon": "gauge"
         }
       ]
@@ -110,7 +110,7 @@
     "primary": {
       "type": "button",
       "label": "Get Started",
-      "href": "https://ratelimiter-microservice-dashboard.vercel.app/"
+      "href": "https://throttlr.yashjejurkar.me/"
     }
   },
   "footer": {
