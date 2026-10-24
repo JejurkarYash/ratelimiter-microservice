@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import SideBar from "@/components/dashboard/layout/SideBar";
 import TopBar from "@/components/dashboard/layout/TopBar";
 import MainContent from "@/components/dashboard/layout/MainContent";
+import SlowRequestNotice from "@/components/dashboard/layout/SlowRequestNotice";
 import { RefreshCw } from "lucide-react";
 
 export default function DashboardLayout({
@@ -34,6 +35,7 @@ export default function DashboardLayout({
 
   return (
     <div className="fixed inset-0 flex flex-col bg-dashboard-primary overflow-hidden">
+      <SlowRequestNotice />
       <Suspense fallback={<div className="h-[52px] bg-dashboard-primary border-b border-white/10" />}>
         <TopBar />
       </Suspense>
